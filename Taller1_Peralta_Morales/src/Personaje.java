@@ -2,19 +2,15 @@ public class Personaje{
 
     private String nombre;
     private String rol;
-    private int precio;
+    private int precio = 915;
     private int recaudacion;
-    private listaAspecto[] listaAspectos;
+    private listaAspecto listaAspectos;
+    private int cantAspectos;
 
 
-    public Personaje(String nombre, String rol, int precio, int recaudacion, listaAspecto[] listaAspectos) {
-        this.nombre = nombre;
-        this.rol = rol;
-        this.recaudacion = recaudacion;
-        this.listaAspectos = listaAspectos;
-    
+    public Personaje(){
+
     }
-
 
     public String getNombre() {
         return this.nombre;
@@ -48,12 +44,16 @@ public class Personaje{
         this.recaudacion = recaudacion;
     }
 
-    public listaAspecto[] getListaAspectos() {
+    public listaAspecto getListaAspectos() {
         return this.listaAspectos;
     }
 
-    public void setListaAspectos(listaAspecto[] listaAspectos) {
-        this.listaAspectos = listaAspectos;
+    public int getCantAspectos(){
+        return this.cantAspectos;
+    }
+
+    public void setCantAspectos(int cantAspectos){
+        this.cantAspectos = cantAspectos;
     }
         
     @Override

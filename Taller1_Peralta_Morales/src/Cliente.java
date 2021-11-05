@@ -9,15 +9,9 @@ public class Cliente {
     private boolean bloqueo;
     private String region;
 
-    public Cliente(String nombre, String contraseña, String id, int nivel, int RP, listaPersonajesPoseidos personajesPoseidos, boolean bloqueo, String region) {
-        this.nombre = nombre;
-        this.contraseña = contraseña;
-        this.id = id;
-        this.nivel = nivel;
-        this.RP = RP;
-        this.personajesPoseidos = personajesPoseidos;
-        this.bloqueo = bloqueo;
-        this.region = region;
+
+    public Cliente(){
+
     }
 
     public String getNombre() {

@@ -5,12 +5,7 @@ public class Aspecto {
     private int precio;
     private Personaje personaje;
 
-
-    public Aspecto(String nombre, String calidad, int precio, Personaje personaje) {
-        this.nombre = nombre;
-        this.calidad = calidad;
-        this.precio = precio;
-        this.personaje = personaje;
+    public Aspecto(){
 
     }
     
