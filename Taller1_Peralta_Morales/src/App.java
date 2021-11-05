@@ -3,7 +3,7 @@ import java.io.File;
 import java.io.IOException;
 public class App {
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
+
 
 
     } // Fin Main
@@ -44,7 +44,14 @@ public class App {
             c.setId(datos[2]);
             c.setNivel(Integer.parseInt(datos[3]));
             c.setRP(Integer.parseInt(datos[4]));
-            for (int i = 5; i < 5+())
+            int i;
+            for (i = 6; i < datos.length; i+= (2+Integer.parseInt(datos[i+1]))){
+                c.getPersonajesPoseidos().ingresarPersonaje(datos[i]);
+                int cantskins = Integer.parseInt(datos[i+1]);
+                for (int j = 1; j <= cantskins; j++){
+                    c.getPersonajesPoseidos().getPersonajePoseido(datos[i]).getAspectosPoseidos().ingresarAspecto(datos[i+j+1]);
+                }
+            }
         }
     }
 
