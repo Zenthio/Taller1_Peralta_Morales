@@ -16,9 +16,11 @@ public class listaPersonajesPoseidos {
 
     }
 
-    public void getPersonaje(String string) {
+    public Personaje getPersonaje(String string) {
         
     }
-
+    public void setCantPersonajesPoseidos(int cant){
+        this.cantPersonajesPoseidos = cant;
+    }
 
 }
