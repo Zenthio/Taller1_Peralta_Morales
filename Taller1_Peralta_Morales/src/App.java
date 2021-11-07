@@ -3,7 +3,7 @@ import java.io.File;
 import java.io.IOException;
 public class App {
     public static void main(String[] args) throws Exception {
-        String line = "NotPepito,PepitoGamer777,vegetta1111,434,12000,2,Vex,1,Portadora del amanecer,Jhin,2,Oscuridad Cosmica,forajido,LAS";
+        String line = "CHL Zenthio,contraseña,ElWatonTottus,315,230,5,Zed,3,Proyecto,Relampago,Campeonato,Aphelios,1,Amanecer,Azir,2,Reinos,Hielo,Vayne,2,Proyecto,China,Vex,1,Amanecer,LAS";
         String[] datos = line.split(",");
         String nombre = datos[0];
         String contra = datos[1];

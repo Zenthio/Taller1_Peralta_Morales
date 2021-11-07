@@ -8,8 +8,9 @@ public class Personaje{
     private int cantAspectos;
 
 
-    public Personaje(){
-
+    public Personaje(String nombre, String rol){
+        this.nombre = nombre;
+        this.rol = rol;
     }
 
     public String getNombre() {
@@ -28,20 +29,16 @@ public class Personaje{
         this.rol = rol;
     }
 
-    public int getPrecio() {
-        return this.precio;
-    }
-
-    public void setPrecio(int precio) {
-        this.precio = precio;
-    }
-
     public int getRecaudacion() {
         return this.recaudacion;
     }
 
     public void setRecaudacion(int recaudacion) {
         this.recaudacion = recaudacion;
+    }
+
+    public void addRecaudacion(int recaudacion) {
+        this.recaudacion += recaudacion;
     }
 
     public listaAspecto getListaAspectos() {
@@ -61,7 +58,6 @@ public class Personaje{
         return "{" +
             " nombre='" + getNombre() + "'" +
             ", rol='" + getRol() + "'" +
-            ", precio='" + getPrecio() + "'" +
             ", recaudacion='" + getRecaudacion() + "'" +
             ", listaAspectos='" + getListaAspectos() + "'" +
             "}";

@@ -5,10 +5,28 @@ public class Aspecto {
     private int precio;
     private Personaje personaje;
 
-    public Aspecto(){
 
+    public Aspecto(String nombre, String calidad, Personaje personaje) {
+        this.nombre = nombre;
+        this.calidad = calidad;
+        this.personaje = personaje;  
+        if (calidad.equals("M")){
+            this.precio = 3250;
+        }
+        if (calidad.equals("D")){
+            this.precio = 2750;
+        }
+        if (calidad.equals("L")){
+            this.precio = 1820;
+        }
+        if (calidad.equals("E")){
+            this.precio = 1350;
+        }
+        if (calidad.equals("N")){
+            this.precio = 975;
+        }
     }
-    
+
     public String getNombre() {
         return this.nombre;
     }

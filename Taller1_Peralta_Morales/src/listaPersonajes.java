@@ -5,7 +5,7 @@ public class listaPersonajes {
     int cantPersonajes;
 
     public listaPersonajes(){
-        listaPersonajes = new Personaje[max-1];
+        listaPersonajes = new Personaje[max];
         cantPersonajes = 0; 
     }
 
@@ -18,7 +18,7 @@ public class listaPersonajes {
         return false;
     }
 
-    public Personaje buscarPersonaje(String nombre){
+    public Personaje getPersonaje(String nombre){
         int i;
         for (i = 0; i < cantPersonajes; i++){
             if (listaPersonajes[i].getNombre().equals(nombre)){
@@ -31,5 +31,9 @@ public class listaPersonajes {
         else {
             return listaPersonajes[i];
         }
-    }   
+    }
+    
+    public int getCantPersonajes(){
+        return this.cantPersonajes;
+    }
 }

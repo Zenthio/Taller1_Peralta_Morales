@@ -25,12 +25,31 @@ public class listaAspecto {
         return false;
     }
 
-    public Aspecto getAspecto (int i) {
+    public Aspecto getAspectoI(int i) {
         if (i >= 0 && i < cantAspectos){
             return listaAspectos[i];
         } else {
             return null;
         }
+    }
+
+    public Aspecto getAspecto(String nombre){
+        int i;
+        for (i = 0; i < cantAspectos; i++){
+            if (listaAspectos[i].getNombre().equals(nombre)){
+                break;
+            }
+        }
+        if (i == cantAspectos){
+            return null;
+        }
+        else {
+            return listaAspectos[i];
+        }
+    }
+
+    public int getMax() {
+        return this.max;
     }
 
 

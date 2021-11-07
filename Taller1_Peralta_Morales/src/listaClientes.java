@@ -4,7 +4,7 @@ public class listaClientes {
     private int max = 10000; 
     private int cantClientes;
 
-    public listaClientes(){
+    public listaClientes(int max){
         Cliente[] listaClientes = new Cliente[max];
         cantClientes = 0;
     }
@@ -16,5 +16,32 @@ public class listaClientes {
             return true;
         }
         return false;
+    }
+
+    public Cliente buscarCliente(String nombre){
+        int i;
+        for (i = 0; i < cantClientes; i++){
+            if (listaClientes[i].getNombre().equals(nombre)){
+                break;
+            }
+        }
+        if (i == cantClientes){
+            return null;
+        } else {
+            return listaClientes[i];
+        }
+
+    }
+
+    public int getCantClientes(){
+        return this.cantClientes;
+    }
+
+    public Cliente getClienteI(int i) {
+        if (i >= 0 && i < cantClientes){
+            return listaClientes[i];
+        } else {
+            return null;
+        }
     }
 }

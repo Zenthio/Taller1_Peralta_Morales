@@ -4,15 +4,21 @@ public class Cliente {
     private String contraseña;
     private String id;
     private int nivel;
-    private int RP;
+    private int RP = 0;
     private listaPersonajesPoseidos personajesPoseidos;
     private boolean bloqueo;
     private String region;
 
-
-    public Cliente(){
-
+    public Cliente(String nombre, String contraseña, String id, int nivel, int RP, String region) {
+        this.nombre = nombre;
+        this.contraseña = contraseña;
+        this.id = id;
+        this.nivel = nivel;
+        this.RP = RP;
+        this.bloqueo = false;
+        this.region = region;
     }
+
 
     public String getNombre() {
         return this.nombre;
@@ -51,9 +57,12 @@ public class Cliente {
     }
 
     public void setRP(int RP) {
-        this.RP = RP;
+        this.RP += RP;
     }
 
+    public void takeRP(int numero){
+        this.RP -= numero;
+    }
     public listaPersonajesPoseidos getPersonajesPoseidos() {
         return this.personajesPoseidos;
     }
@@ -80,6 +89,16 @@ public class Cliente {
 
     public void setRegion(String region) {
         this.region = region;
+    }
+
+    public void copiar(Cliente cliente){
+        this.setNombre(cliente.getNombre());
+        this.setContraseña(cliente.getContraseña());
+        this.setId(cliente.getId());
+        this.setNivel(cliente.getNivel());
+        this.setRP(cliente.getRP());
+        this.setBloqueo(cliente.getBloqueo());
+        this.setRegion(cliente.getRegion());
     }
 
     @Override
