@@ -5,7 +5,7 @@ public class listaClientes {
     private int cantClientes;
 
     public listaClientes(int max){
-        Cliente[] listaClientes = new Cliente[max];
+        listaClientes = new Cliente[max];
         cantClientes = 0;
     }
 

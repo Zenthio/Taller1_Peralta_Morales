@@ -52,7 +52,10 @@ public class Personaje{
     public void setCantAspectos(int cantAspectos){
         this.cantAspectos = cantAspectos;
     }
-        
+    
+    public int getPrecio(){
+        return this.precio;
+    }
     @Override
     public String toString() {
         return "{" +

@@ -32,6 +32,14 @@ public class listaPersonajes {
             return listaPersonajes[i];
         }
     }
+
+    public Personaje getPersonajeI(int i) {
+        if (i >= 0 && i < cantPersonajes){
+            return listaPersonajes[i];
+        } else {
+            return null;
+        }
+    }
     
     public int getCantPersonajes(){
         return this.cantPersonajes;

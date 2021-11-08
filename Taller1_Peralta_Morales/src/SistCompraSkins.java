@@ -1,7 +1,7 @@
 public interface SistCompraSkins{
     
     //RF2
-    public boolean iniciarSesion(String nombre, String contraseña);
+    public boolean iniciarSesion();
 
     public boolean crearCuenta(String nombre, String contraseña, String id, int nivel, int rp, String region);
 
@@ -21,13 +21,13 @@ public interface SistCompraSkins{
     public void cambiarClave();
 
     //RF4 ADMIN
-    public String desplegarVentasRol();
+    public String obtenerVentasRol();
 
-    public String desplegarVentasRegion();
+    public String obtenerVentasRegion();
 
-    public String desplegarVentasPersonaje();
+    public String obtenerVentasPersonaje();
 
-    public String desplegarPersonajeRol();
+    public String obtenerPersonajeRol();
 
     public boolean registrarPersonaje();
 
@@ -45,8 +45,19 @@ public interface SistCompraSkins{
 
     public void mayorMenor();
 
-    public String desplegarCuenta();
+    public String obtenerCuentas();
 
+    public listaPersonajes getListaPersonajes();
+
+    public listaClientes getListaClientes();
+
+    public int getPrivilegio();
+
+    public String obtenerDatosPersonajes();
+
+    public String obtenerDatosClientes();
+
+    public String obtenerDatosRecaudacion();
 
 
 

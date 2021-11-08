@@ -1,8 +1,18 @@
 import java.util.Scanner;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 public class App {
     public static void main(String[] args) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+        SistCompraSkins sys = new SistCompraSkinsImpl(5000);
+        lecturaPersonajes(sys);
+        lecturaCuentas(sys);
+        lecturaRecaudacion(sys);
+        menu(sys,scanner);
+        /*
         String line = "CHL Zenthio,contraseña,ElWatonTottus,315,230,5,Zed,3,Proyecto,Relampago,Campeonato,Aphelios,1,Amanecer,Azir,2,Reinos,Hielo,Vayne,2,Proyecto,China,Vex,1,Amanecer,LAS";
         String[] datos = line.split(",");
         String nombre = datos[0];
@@ -19,69 +29,73 @@ public class App {
                    System.out.println("Nombre a: "+datos[i+j+1]);
                 }
             }
-
+        */
 
     } // Fin Main
 
-    public void lecturaPersonajes() throws IOException {
+    public static void lecturaPersonajes(SistCompraSkins sys) throws IOException {
         
-        Scanner arch = new Scanner(new File("personajes.txt"));
-        listaPersonajes listapj = new listaPersonajes();
+        Scanner arch = new Scanner(new File("Personajes.txt"));
         while(arch.hasNextLine()) {
-            Personaje p = new Personaje();
             String line = arch.nextLine();
             String[] datos = line.split(",");
-            p.setNombre(datos[0]);
-            p.setRol(datos[1]);
-            p.setCantAspectos(Integer.parseInt(datos[2]));
+            String nombre = datos[0];
+            String rol = datos[1];
+            String cantAspectos = datos[2];
+            Personaje p = new Personaje(nombre,rol);
+            sys.getListaPersonajes().ingresarPersonaje(p);
             for (int i = 3; i < datos.length; i+=2){
-                Aspecto a = new Aspecto();
-                a.setNombre(datos[i]);
-                a.setCalidad(datos[i+1]);
+                String nombreA = datos[i];
+                String calidadA = datos[i+1];
+                Aspecto a = new Aspecto(nombreA, calidadA, p);
                 p.getListaAspectos().ingresarAspecto(a);
             }
-            listapj.ingresarPersonaje(p);
             
 
         }
         arch.close();
     }
 
-    public void lecturaCuentas() throws IOException {
-        Scanner arch = new Scanner(new File("cuentas.txt"));
-        listaClientes listacl = new listaClientes();
+    public static void lecturaCuentas(SistCompraSkins sys) throws IOException {
+        Scanner arch = new Scanner(new File("Cuentas.txt"));
         while (arch.hasNextLine()){
-            Cliente c = new Cliente();
             String line = arch.nextLine();
             String[] datos = line.split(",");
-            c.setNombre(datos[0]);
-            c.setContraseña(datos[1]);
-            c.setId(datos[2]);
-            c.setNivel(Integer.parseInt(datos[3]));
-            c.setRP(Integer.parseInt(datos[4]));
+            String nombre = datos[0];
+            String contraseña = datos[1];
+            String id = datos[2];
+            int nivel = Integer.parseInt(datos[3]);
+            int rp = Integer.parseInt(datos[4]);
+            String region = datos[datos.length-1];
+            sys.crearCuenta(nombre,contraseña,id,nivel,rp,region);
+            Cliente c = new Cliente (nombre,contraseña,id,nivel,rp,region);
             c.getPersonajesPoseidos().setCantPersonajesPoseidos(Integer.parseInt(datos[5]));
             int i;
             for (i = 6; i < datos.length; i+= (2+Integer.parseInt(datos[i+1]))){
-                c.getPersonajesPoseidos().ingresarPersonaje(datos[i]);
+                Personaje p = sys.getListaPersonajes().getPersonaje(datos[i]);
+                PersonajePoseido pP = new PersonajePoseido(c, p);
+                c.getPersonajesPoseidos().ingresarPersonaje(pP);
                 int cantskins = Integer.parseInt(datos[i+1]);
                 for (int j = 1; j <= cantskins; j++){
-                    c.getPersonajesPoseidos().getPersonajePoseido(datos[i]).getAspectosPoseidos().ingresarAspecto(datos[i+j+1]);
+                    Aspecto a = p.getListaAspectos().getAspecto(datos[i+j+1]);
+                    AspectoPoseido aP = new AspectoPoseido(c,a);
+                    pP.getAspectosPoseidos().ingresarAspecto(aP);
                 }
             }
-            c.setRegion(datos[datos.length-1]);
+    
 
         }
     }
 
-    public void lecturaRecaudacion(listaPersonajes listaPersonajes) throws IOException {
-        Scanner arch = new Scanner(new File("estadisticas.txt"));
+    public static void lecturaRecaudacion(SistCompraSkins sys) throws IOException {
+        Scanner arch = new Scanner(new File("Estadisticas.txt"));
         while (arch.hasNextLine()){
             String line = arch.nextLine();
             String[] datos = line.split(",");
             String nombre = datos[0];
             String recaudacion = datos[1];
-            if (listaPersonajes.buscarPersonaje(nombre) != null){
-                listaPersonajes.buscarPersonaje(nombre).setRecaudacion(Integer.parseInt(recaudacion));
+            if (sys.getListaPersonajes().getPersonaje(nombre) != null){
+                sys.getListaPersonajes().getPersonaje(nombre).setRecaudacion(Integer.parseInt(recaudacion));
             }
 
             
@@ -89,6 +103,220 @@ public class App {
         }
     }
 
+    public static void menu(SistCompraSkins sys, Scanner scanner){
+        while (true){
+            try {
+                sys.iniciarSesion();
+            } catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
+            if (sys.getPrivilegio() == 1){
+                menuCliente(sys, scanner);
+            }
+            if (sys.getPrivilegio() == 2){
+                menuAdmin(sys, scanner);
+            }
+            if (sys.getPrivilegio() == 0){
+                break;
+            }
+
+        }
+        escritura(sys);
+    }
+
+    private static void menuCliente(SistCompraSkins sys, Scanner scanner) {
+
+        System.out.println("<================================> MENU CLIENTE <================================>");
+        boolean salir = false;
+        int opcion;
+        do{
+            System.out.println("[1] Comprar Skin\n [2] Comprar Personaje\n[3] Skins Disponibles\n[4] Mostrar Inventario"
+            +"\n[5] Recargar RP\n[6] Mostrar datos de cuenta\n[7] Salir");
+            try {
+                System.out.println("Ingrese su opción: ");
+                opcion = Integer.parseInt(scanner.nextLine());
+                switch (opcion) {
+                    case 1:
+                    try {
+                        sys.comprarSkin();
+                    } catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+    
+                    case 2:
+                    try {
+                        sys.comprarPersonaje();
+                    } catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+    
+                    case 3:
+                    try {
+                        System.out.println(sys.skinDisponibles());
+                    } catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+    
+                    case 4:
+                    try {
+                        System.out.println(sys.mostrarInventario());
+    
+                    } catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+    
+                    case 5:
+                    try {
+                        sys.recargarRp();
+                    } catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+    
+                    case 6:
+                    try {
+                        System.out.println(sys.datosCuenta());
+                    } catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+    
+                    case 7:
+                    salir = true;
+                    break;
+    
+                    default:
+                    System.out.println("La opción ingresada no es correcta");
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Debes ingresar solo caracteres numéricos");
+            }
+        } while (salir != true);
+    }
+    
+
+    public static void menuAdmin(SistCompraSkins sys, Scanner scanner){
+        System.out.println("<================================> MENU CLIENTE <================================>");
+        boolean salir = false;
+        int opcion;
+
+        do {
+            System.out.println("[1] Desplegar recaudación de ventas por rol\n[2] Desplegar recaudación de ventas por región\n"
+            +"[3] Desplegar recaudación de ventas por personaje\n[4] Desplegar cantidad de personajes por rol"
+            +"[5] Agregar un personaje\n[6] Agregar una skin\n[7] Bloquear a un jugador\n[8] Desplegar cuentas\n [9] Salir");
+
+            try {
+                System.out.println("Ingrese su opción: ");
+                opcion = Integer.parseInt(scanner.nextLine());
+                switch (opcion) {
+                    case 1:
+                    try {
+                        System.out.println(sys.obtenerVentasRol());
+                    } catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+
+                    case 2:
+                    try {
+                        System.out.println( sys.obtenerVentasRegion());
+                    } catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+
+                    case 3:
+                    try {
+                        System.out.println(sys.obtenerVentasPersonaje());
+                    } catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+
+                    case 4:
+                    try {
+                        System.out.println(sys.obtenerPersonajeRol());
+                    } catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+
+                    case 5:
+                    try {
+                        sys.registrarPersonaje();
+                    } catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+
+                    case 6:
+                    try {
+                        sys.registrarSkin();
+                    } catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+
+                    case 7:
+                    try {
+                        sys.bloquearJugador();
+                    } catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+
+                    case 8:
+                    try {
+                        sys.mayorMenor();
+                        System.out.println(sys.obtenerCuentas());
+                    } catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+
+                    case 9:
+                    salir = true;
+                    break;
+
+                    default:
+                    System.out.println("La opción ingresada no es correcta.");
+                    break;
+                }
+            } catch (NumberFormatException e){
+                System.out.println("Se debe de ingresar sólo carácteres numéricos");
+            }
+        } while (salir != true);
+    }
+
+    public static void escritura(SistCompraSkins sys){
+        try {
+            BufferedWriter personajes = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Personajes.txt")));
+            personajes.write(sys.obtenerDatosPersonajes());
+            personajes.close();
+        } catch (IOException e){ 
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            BufferedWriter clientes = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Cuentas.txt")));
+            clientes.write(sys.obtenerDatosClientes());
+            clientes.close();
+        } catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            BufferedWriter recaudacion = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Estadisticas.txt")));
+            recaudacion.write(sys.obtenerDatosRecaudacion());
+            recaudacion.close();
+        } catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
 
 
 

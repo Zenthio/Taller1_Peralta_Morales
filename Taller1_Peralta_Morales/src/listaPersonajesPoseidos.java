@@ -7,7 +7,7 @@ public class listaPersonajesPoseidos {
     private int cantPersonajesPoseidos;
 
     public listaPersonajesPoseidos(){
-        PersonajePoseido[] listaPersonajesPoseidos = new PersonajePoseido[max];
+        listaPersonajesPoseidos = new PersonajePoseido[max];
         cantPersonajesPoseidos = 0;
     }
 
