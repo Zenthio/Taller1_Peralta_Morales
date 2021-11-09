@@ -3,7 +3,7 @@ public interface SistCompraSkins{
     //RF2
     public boolean iniciarSesion();
 
-    public boolean crearCuenta(String nombre, String contraseña, String id, int nivel, int rp, String region);
+    public boolean crearCuenta(String nombre, String contraseña, String id, int nivel, int rp, String region, int cantPj);
 
     //RF3 CLIENTE
     public boolean comprarSkin();
@@ -33,23 +33,21 @@ public interface SistCompraSkins{
 
     public boolean registrarSkin();
 
-    public void personajeSkin(Personaje personaje, Aspecto skin);
+    public void addPersonaje(String nombre, String rol, int cantAspectos);
 
-    public void personajeCuenta(Personaje personaje, Cliente cuenta);
+    public void addSkin(String nombre, String calidad, String nombreP);
 
-    public void skinCuenta(AspectoPoseido aspectoP, Cliente cuenta, PersonajePoseido personajeP);
+    public void addPersonajeCuenta(String nombreP, String nombreC);
 
-    public void dineroRecaudado();
+    public void addSkinCuenta(String nombreP, String nombreA, String nombreC);
+
+    public void addRecaudacion(String nombreP, int recaudacion);
 
     public void bloquearJugador();
 
     public void mayorMenor();
 
     public String obtenerCuentas();
-
-    public listaPersonajes getListaPersonajes();
-
-    public listaClientes getListaClientes();
 
     public int getPrivilegio();
 
@@ -59,6 +57,6 @@ public interface SistCompraSkins{
 
     public String obtenerDatosRecaudacion();
 
-
+    public Personaje buscarPersonaje(String nombreP);
 
 }

@@ -18,7 +18,7 @@ public class listaClientes {
         return false;
     }
 
-    public Cliente buscarCliente(String nombre){
+    public Cliente getCliente(String nombre){
         int i;
         for (i = 0; i < cantClientes; i++){
             if (listaClientes[i].getNombre().equals(nombre)){

@@ -4,10 +4,9 @@ public class listaAspectosPoseidos {
     private int cantAspectosPoseidos;
     private int max = 99;
 
-    public listaAspectosPoseidos(int max){
+    public listaAspectosPoseidos(){
         listaAspectosPoseidos = new AspectoPoseido[max];
         cantAspectosPoseidos = 0;
-        this.max = max;
     }
 
     public boolean ingresarAspecto (AspectoPoseido aspectoP){
@@ -36,15 +35,11 @@ public class listaAspectosPoseidos {
         int i;
         for (i = 0; i < cantAspectosPoseidos; i++){
             if (listaAspectosPoseidos[i].getAspecto().getNombre().equals(nombre)){
-                break;
+                return listaAspectosPoseidos[i];
             }
         }
-        if (i == cantAspectosPoseidos){
-            return null;
-        }
-        else {
-            return listaAspectosPoseidos[i];
-        }
+        return null;
+        
     }
 
 }

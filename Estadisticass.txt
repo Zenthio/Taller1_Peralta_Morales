@@ -1,6 +1,6 @@
-Sett,500000
-Jhin,600000
 Jinx,400000
+Sett,500000
+Lillia,0
 Juanito,120000
 Gato choro,900000
 Perro detonao,500000
@@ -11,4 +11,5 @@ Kanguro boxeador,400000
 Pulpo Paul,500000
 Alfred,10000
 Vex,200000
+Jhin,600000
 Kaisa,700000

@@ -1,2 +1,8 @@
-CHL Zenthio,contraseña,ElWatonTottus,315,230,5,Zed,3,Proyecto,Relampago,Campeonato,Aphelios,1,Amanecer,Azir,2,Reinos,Hielo,Vayne,2,Proyecto,China,Vex,1,Amanecer,LAS
-LyxWindfell,lyxwindfell,Lyx
+NotPepito,PepitoGamer777,vegetta1111,434,12000,2,Vex,1,Portadora del amanecer,Jhin,2,Oscuridad Cosmica,forajido,LAS
+FenrirXs,Fenrir,menorque3,430,2000,1,Kaisa,2,Kda All Out,Exterminador galactico,LAN
+xXMooseXx,AlceAtomico,alcepulento,543,300000,1,Juanito,3,Juanito playero,Juanito abogado, Juanito carnaval,NA
+SergioSur89,TaladroBauker1990,ser-gio,21,1000,3,Aldred,1,Alfred terror cosmico,Gargola pulenta,2,Gargola escopeta,Gargola keke,Oscar,1,Oscar el pez,EUW
+TiburoncinAsesino_Oscuro781,Checoslovaquia,Jaime,500,400000,2,Gato choro,3,Gato chorizo,Gato vienesa,Gato longaniza,Perro detonado,1,Perro bomba,RU
+Impresora03,HP300,escanerDeskJet,342,32000,2,Pulpo Paul,3,Salpicon de pulpo,Pulpo a feira,Pulpo tinta negra,Kanguro boxeador,2,Kangu,Kanguro volador,KR
+DoomSlayer97,el_señor_es_mi_pastor,doomguy97,213,243567,2,Demonio malo,4,Demonio bueno,Demonio elevado a 2,Demonio playero,Demonio azul,Minotauro Poderoso,3,Minotauro Hawaii,Minotauro Diabolico,Minotauro Evangelico,LAN
+RaidMax_MataSpiders,lasDejabienMuertasOKOKO,spiderman,9,213445,1,Spider Simplona,2,Spider no tan simplona,Arania,NA

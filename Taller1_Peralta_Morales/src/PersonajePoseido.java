@@ -6,6 +6,7 @@ public class PersonajePoseido {
     public PersonajePoseido(Cliente dueño, Personaje personaje){
         this.dueño = dueño;
         this.personaje = personaje;
+        AspectosPoseidos = new listaAspectosPoseidos();
     }
 
     public Personaje getPersonaje(){

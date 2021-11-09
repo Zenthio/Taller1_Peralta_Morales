@@ -22,15 +22,11 @@ public class listaPersonajes {
         int i;
         for (i = 0; i < cantPersonajes; i++){
             if (listaPersonajes[i].getNombre().equals(nombre)){
-                break;
+                System.out.println(listaPersonajes[i].getNombre());
+                return listaPersonajes[i];
             }
         }
-        if (i == cantPersonajes){
-            return null;
-        }
-        else {
-            return listaPersonajes[i];
-        }
+        return null;
     }
 
     public Personaje getPersonajeI(int i) {

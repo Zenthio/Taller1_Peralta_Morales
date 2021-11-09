@@ -13,7 +13,7 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
     private static double recaudacionKR = 0;
     private static double recaudacionNA = 0;
     private static double recaudacionRU = 0;
-    private Cliente admin = new Cliente("admin","admin","admin",0,9999999,"NA");
+    private Cliente admin = new Cliente("admin","admin","admin",0,9999999,"NA",0);
 
     //Al tener precondicion, hay que controlar en el main el throw exception 
     public SistCompraSkinsImpl(int cantClientes){
@@ -33,9 +33,12 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
 
             System.out.println("Ingresar nombre: ");
             String nombre = scanner.nextLine();
+            if (listaClientes.getCliente(nombre).getBloqueo()){
+                throw new NullPointerException("Este usuario se encuentra bloqueado.");
+            }
             System.out.println("Ingresar contraseña: ");
             String contraseña = scanner.nextLine();
-            if (listaClientes.buscarCliente(nombre) == null || !listaClientes.buscarCliente(nombre).getContraseña().equals(contraseña)){
+            if (listaClientes.getCliente(nombre) == null || !listaClientes.getCliente(nombre).getContraseña().equals(contraseña)){
                 System.out.println("Uno de los datos es erroneo o no existe, desea registrarse?\n[1] Sí\n[2] No");
                 int opcionA = Integer.parseInt(scanner.nextLine());
                 if (opcionA == 1){
@@ -48,7 +51,7 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
                     this.privilegio = 2;
                     return true;
                 } else {
-                    this.c = listaClientes.buscarCliente(nombre);
+                    this.c = listaClientes.getCliente(nombre);
                     this.privilegio = 1;
                     return true;
                 }
@@ -59,6 +62,7 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
         }
         if (opcion == 3){
             this.privilegio = 0;
+            return true;
         }
         return false;
     }
@@ -68,26 +72,29 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
         String nombre = scanner.nextLine();
         System.out.println("Ingresar ID(Nick) a registrar: ");
         String id = scanner.nextLine();
-        if (listaClientes.buscarCliente(nombre) == null || listaClientes.buscarCliente(nombre).getId().equals(id)){
-            throw new NullPointerException("Uno de los datos ingresados ya existe en el sistema");
-        } else {
-            System.out.println("Ingrese contraseña a registrar: ");
-            String contraseña = scanner.nextLine();
-            System.out.println("Ingresar región en la que se encuentra su cuenta: ");
-            String region = scanner.nextLine();
-            Cliente clienteNuevo = new Cliente(nombre, contraseña, id, 0, 0, region);
-            if (!listaClientes.ingresarCliente(clienteNuevo)){
-                throw new NullPointerException("Se alcanzó el límite de usuarios registrados");
-            } else {
-                return true;
-            }
+        if (listaClientes.getCliente(nombre).getBloqueo()){
+            throw new NullPointerException("Este usuario se encuentra bloqueado.");
         }
+        if (listaClientes.getCliente(nombre) != null){ //
+            throw new NullPointerException("El nombre ya existe en el sistema");
+        }
+        System.out.println("Ingrese contraseña a registrar: ");
+        String contraseña = scanner.nextLine();
+        System.out.println("Ingresar región en la que se encuentra su cuenta: ");
+        String region = scanner.nextLine();
+        Cliente clienteNuevo = new Cliente(nombre, contraseña, id, 0, 0, region, 0);
+        if (!listaClientes.ingresarCliente(clienteNuevo)){
+            throw new NullPointerException("Se alcanzó el límite de usuarios registrados");
+        } else {
+            return true;
+        }
+        
     }
     @Override
-    public boolean crearCuenta(String nombre, String contraseña, String id, int nivel, int rp, String region) {
+    public boolean crearCuenta(String nombre, String contraseña, String id, int nivel, int rp, String region, int cantPj) {
         // TODO Auto-generated method stub
-        if (listaClientes.buscarCliente(nombre) == null){
-                Cliente c = new Cliente(nombre, contraseña, id, nivel, rp, region);
+        if (listaClientes.getCliente(nombre) == null){
+                Cliente c = new Cliente(nombre, contraseña, id, nivel, rp, region, cantPj);
                  if (!listaClientes.ingresarCliente(c)){
                      throw new NullPointerException("Se alcanzó el límite de usuarios registrados.");
                  } else {
@@ -104,20 +111,20 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
     public boolean comprarSkin(){
         System.out.println("Ingrese nombre de personaje: \n");
         String nombreP = scanner.nextLine();
-        if (listaPersonajes.getPersonaje(nombreP).equals(null)){
+        if (listaPersonajes.getPersonaje(nombreP) == (null)){
             throw new NullPointerException("El personaje no existe.");
         } else {
-            if (c.getPersonajesPoseidos().getPersonaje(nombreP).equals(null)){
+            if (c.getPersonajesPoseidos().getPersonaje(nombreP) == (null)){
                 throw new NullPointerException("El personaje no es poseido por la cuenta.");
             } else {
                 System.out.println("Ingrese nombre de skin a comprar: \n");
                 String nombreS = scanner.nextLine();
                 PersonajePoseido personajeP = c.getPersonajesPoseidos().getPersonaje(nombreP);
                 Personaje personaje = listaPersonajes.getPersonaje(nombreP);
-                if (listaPersonajes.getPersonaje(nombreP).getListaAspectos().getAspecto(nombreS).equals(null)){
+                if (listaPersonajes.getPersonaje(nombreP).getListaAspectos().getAspecto(nombreS) == (null)){
                     throw new NullPointerException("El aspecto no existe para este personaje.");
                 } else {                    
-                    if (!personajeP.getAspectosPoseidos().getAspecto(nombreS).equals(null)){
+                    if (personajeP.getAspectosPoseidos().getAspecto(nombreS) != null){
                         throw new NullPointerException("El aspecto ya está comprado para este personaje.");
                     } else {
                         AspectoPoseido aspectoPoseido = personajeP.getAspectosPoseidos().getAspecto(nombreS);
@@ -157,10 +164,10 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
     public boolean comprarPersonaje() {
         System.out.println("Ingrese nombre de personaje: \n");
         String nombreP = scanner.nextLine();
-        if (listaPersonajes.getPersonaje(nombreP).equals(null)){
+        if (listaPersonajes.getPersonaje(nombreP) == (null)){
             throw new NullPointerException("El personaje no existe.");
         } else {
-            if (!c.getPersonajesPoseidos().getPersonaje(nombreP).equals(null)){
+            if (c.getPersonajesPoseidos().getPersonaje(nombreP) != (null)){
                 throw new NullPointerException("El personaje es poseido por la cuenta.");
             } else {
                 PersonajePoseido personajeP = c.getPersonajesPoseidos().getPersonaje(nombreP);
@@ -342,14 +349,14 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
     public boolean registrarPersonaje() {
         System.out.println("Ingrese nombre de personaje que desea agregar: \n");
         String nombreP = scanner.nextLine();
-        if (!listaPersonajes.getPersonaje(nombreP).equals(null)){
+        if (listaPersonajes.getPersonaje(nombreP) != (null)){
             throw new NullPointerException("El nombre ingresado ya existe en el sistema.");
         } else {
             System.out.println("Ingresar su rol: \n");
             String rol = scanner.nextLine().toUpperCase();
             System.out.println("Ingresar cantidad de skins que posee");
             int cantSkins = Integer.parseInt(scanner.nextLine());
-            Personaje personaje = new Personaje(nombreP, rol);
+            Personaje personaje = new Personaje(nombreP, rol, 0);
             if (!listaPersonajes.ingresarPersonaje(personaje)){
                 throw new NullPointerException("Ya se alcanzó el límite de personajes en el sistema.");
             } else {
@@ -374,7 +381,7 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
     public boolean registrarSkin() {
         System.out.println("Ingrese nombre de personaje al cual le desea agregar skins: ");
         String nombreP = scanner.nextLine();
-        if (listaPersonajes.getPersonaje(nombreP).equals(null)){
+        if (listaPersonajes.getPersonaje(nombreP) == (null)){
             throw new NullPointerException("No existe algún personaje con el nombre ingresado: ");
         } else {
             Personaje personaje = listaPersonajes.getPersonaje(nombreP);
@@ -400,61 +407,113 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
     }
 
     @Override
-    public void personajeSkin(Personaje personaje, Aspecto skin) {
-        if (listaPersonajes.getPersonaje(personaje.getNombre()).equals(null)){
-            throw new NullPointerException("El personaje no existe.");
-        } else {
-            if (personaje.getListaAspectos().getAspecto(skin.getNombre()).equals(null)){
-                throw new NullPointerException("La skin no existe.");
-            } else {
-                if (!personaje.getListaAspectos().ingresarAspecto(skin)){
-                    throw new NullPointerException("La skin ya se encuentra en el personaje.");
-                }
-            }
+    public void addPersonaje(String nombre, String rol, int cantAspectos){
+        Personaje personaje = new Personaje(nombre, rol, cantAspectos);
+        if (!listaPersonajes.ingresarPersonaje(personaje)){
+            throw new NullPointerException("La lista de personajes está llena");
         }
-        
-    }
-    @Override
-    public void personajeCuenta(Personaje personaje, Cliente cuenta) {
-        if (listaPersonajes.getPersonaje(personaje.getNombre()).equals(null)){
-            throw new NullPointerException("El personaje no existe");
-        } else {
-            PersonajePoseido personajeP = new PersonajePoseido(cuenta, personaje);
-            if (listaClientes.buscarCliente(cuenta.getNombre()).equals(null)){
-                throw new NullPointerException("El cliente no existe");
-            } else {
-                if (!cuenta.getPersonajesPoseidos().ingresarPersonaje(personajeP));
-            }
-        }
-        
-    }
-    @Override
-    public void skinCuenta(AspectoPoseido aspectoP, Cliente cuenta, PersonajePoseido personajeP) {
-        if (cuenta.getPersonajesPoseidos().getPersonaje(personajeP.getPersonaje().getNombre()).equals(null)){
-            throw new NullPointerException("El personaje no existe en el cliente.");
-        } else {
-                if (!personajeP.getAspectosPoseidos().getAspecto(aspectoP.getAspecto().getNombre()).equals(null)){
-                    throw new NullPointerException("El aspecto ya existe en el personaje.");
-                } else {
-                    if (!personajeP.getAspectosPoseidos().ingresarAspecto(aspectoP)){
-                        throw new NullPointerException("Ya se alcanzó el límite de skins del personaje.");
-                    }
-                }
-        }
+        System.out.println("pj: "+listaPersonajes.getPersonaje(nombre).getNombre());
+        System.out.println("rol: "+listaPersonajes.getPersonaje(nombre).getRol());
+        System.out.println("cantpj: "+listaPersonajes.getCantPersonajes());
     }
 
     @Override
-    public void dineroRecaudado() {
-        
+    public void addSkin(String nombreA, String calidadA, String nombreP){
+        if (listaPersonajes.getPersonaje(nombreP) != null){ //Si existe el personaje
+            Personaje p = listaPersonajes.getPersonaje(nombreP);
+            Aspecto skin = new Aspecto(nombreA, calidadA,p);
+            if (p.getListaAspectos().getAspecto(nombreA) == null){
+                //Si la skin NO! EXISTE EN EL PERSONAJE
+                if (!p.getListaAspectos().ingresarAspecto(skin)){
+                    throw new NullPointerException("La lista de aspectos está llena");
+                }            
+            } else {
+                throw new NullPointerException("Ya se encuentra la skin en este personaje");
+            }
+        } else {
+            throw new NullPointerException("No se encontró el personaje o no existe.");
+        }
+        System.out.println("pj: "+listaPersonajes.getPersonaje(nombreP).getNombre());
+        System.out.println("as: "+listaPersonajes.getPersonaje(nombreP).getListaAspectos().getAspecto(nombreA).getNombre());
+        System.out.println("cal "+listaPersonajes.getPersonaje(nombreP).getListaAspectos().getAspecto(nombreA).getCalidad());
+        System.out.println("cantAsPj: "+listaPersonajes.getPersonaje(nombreP).getListaAspectos().getCantAspectos());
+    }
+
+    @Override
+    public void addPersonajeCuenta(String nombreP, String nombreC){
+        if (listaClientes.getCliente(nombreC) != null){ //Si existe el Cliente
+            Cliente c = listaClientes.getCliente(nombreC);
+            if (listaPersonajes.getPersonaje(nombreP) != null){//Si existe el personaje
+                Personaje p = listaPersonajes.getPersonaje(nombreP);
+                PersonajePoseido pP = new PersonajePoseido(c,p);
+                if (c.getPersonajesPoseidos().getPersonaje(nombreP) == null){ //Si el cliente no poseé el personaje
+                    if (!c.getPersonajesPoseidos().ingresarPersonaje(pP)){
+                        throw new NullPointerException("Se alcanzó el límite de personajes poseídos");
+                    }
+                } else {
+                    throw new NullPointerException("El cliente ya poseé el personaje");
+                }
+            } else {
+                throw new NullPointerException("No existe el personaje");
+            }
+        } else {
+            throw new NullPointerException("No existe el cliente");
+        }
+        System.out.println("pjposeido: "+c.getPersonajesPoseidos().getPersonaje(nombreP));
+        System.out.println("cantpjposeido: "+c.getPersonajesPoseidos().getCantPersonajesPoseidos());
+        System.out.println("ncl: "+c.getNombre());
+    }
+
+    @Override
+    public void addSkinCuenta(String nombreP, String nombreA, String nombreC){
+        if (listaClientes.getCliente(nombreC) != null){
+            Cliente c = listaClientes.getCliente(nombreC);
+            if (c.getPersonajesPoseidos().getPersonaje(nombreP) != null){
+                if (listaPersonajes.getPersonaje(nombreP).getListaAspectos().getAspecto(nombreA) != null){
+                    Aspecto a = listaPersonajes.getPersonaje(nombreP).getListaAspectos().getAspecto(nombreA);
+                    AspectoPoseido aP = new AspectoPoseido(c,a);
+                    if (c.getPersonajesPoseidos().getPersonaje(nombreP).getAspectosPoseidos().getAspecto(nombreA) == null){ //Si el personajeposeido no poseé la skin
+                        if (!c.getPersonajesPoseidos().getPersonaje(nombreP).getAspectosPoseidos().ingresarAspecto(aP)){
+                            throw new NullPointerException("Se alcanzó el límite de skins poseidas");
+                        }
+                    } else {
+                        throw new NullPointerException("El personaje poseido ya poseé la skin");
+                    }
+                } else {
+                    throw new NullPointerException("La skin no existe");
+                } 
+            } else {
+                throw new NullPointerException("El cliente no poseé el personaje")  ;
+            } 
+                
+        } else {
+            throw new NullPointerException("El cliente no existe"); 
+        }
+        System.out.println("ncl: "+c.getNombre());
+        System.out.println("pjposeido: "+c.getPersonajesPoseidos().getPersonaje(nombreP));
+        System.out.println("cantpjposeido: "+c.getPersonajesPoseidos().getCantPersonajesPoseidos());
+        System.out.println("asposeido: "+c.getPersonajesPoseidos().getPersonaje(nombreP).getAspectosPoseidos().getAspecto(nombreA));
+        System.out.println("cantasposeidos: "+c.getPersonajesPoseidos().getPersonaje(nombreP).getAspectosPoseidos().getCantAspectosPoseidos());
+    }
+    
+
+    @Override
+    public void addRecaudacion(String nombreP, int recaudacion) {
+        if (listaPersonajes.getPersonaje(nombreP) != null){
+            Personaje p = listaPersonajes.getPersonaje(nombreP);
+            p.setRecaudacion(recaudacion);
+        }
+        System.out.println("pj: "+listaPersonajes.getPersonaje(nombreP));
+        System.out.println("rec: "+listaPersonajes.getPersonaje(nombreP).getRecaudacion());
     }
     @Override
     public void bloquearJugador() {
         System.out.println("Ingresar nombre de cliente a bloquear: ");
         String nombre = scanner.nextLine();
-        if (listaClientes.buscarCliente(nombre).equals(null)){
+        if (listaClientes.getCliente(nombre) == (null)){
             throw new NullPointerException("No se encontró al cliente");
         } else {
-            Cliente c = listaClientes.buscarCliente(nombre);
+            Cliente c = listaClientes.getCliente(nombre);
             c.setBloqueo(true);
         }
         
@@ -482,16 +541,6 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
             retorno += "Nombre: "+cliente.getNombre()+" | Nivel: "+cliente.getNivel()+"\n";
         }
         return retorno;
-    }
-
-    @Override
-    public listaPersonajes getListaPersonajes() {
-        return this.listaPersonajes;
-    }
-
-    @Override
-    public listaClientes getListaClientes(){
-        return this.listaClientes;
     }
 
     @Override
@@ -556,6 +605,22 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
             }
         }
         return retorno;
+    }
+
+    @Override
+    public Personaje buscarPersonaje(String nombreP) {
+        int i;
+        for (i = 0; i < listaPersonajes.getCantPersonajes(); i++){
+            if (listaPersonajes.getPersonajeI(i).getNombre().equals(nombreP)){
+                break;
+            }
+        }
+        if (i == listaPersonajes.getCantPersonajes()){
+            return null;
+        }
+        else {
+            return listaPersonajes.getPersonajeI(i);
+        }
     }
 
 }

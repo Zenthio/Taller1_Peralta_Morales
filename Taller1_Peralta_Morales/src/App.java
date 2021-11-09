@@ -34,72 +34,88 @@ public class App {
     } // Fin Main
 
     public static void lecturaPersonajes(SistCompraSkins sys) throws IOException {
-        
-        Scanner arch = new Scanner(new File("Personajes.txt"));
-        while(arch.hasNextLine()) {
-            String line = arch.nextLine();
-            String[] datos = line.split(",");
-            String nombre = datos[0];
-            String rol = datos[1];
-            String cantAspectos = datos[2];
-            Personaje p = new Personaje(nombre,rol);
-            sys.getListaPersonajes().ingresarPersonaje(p);
-            for (int i = 3; i < datos.length; i+=2){
-                String nombreA = datos[i];
-                String calidadA = datos[i+1];
-                Aspecto a = new Aspecto(nombreA, calidadA, p);
-                p.getListaAspectos().ingresarAspecto(a);
+        try {
+            Scanner arch = new Scanner(new File("Personajes.txt"));
+            while(arch.hasNextLine()) {
+                String line = arch.nextLine();
+                String[] datos = line.split(",");
+                String nombreP = datos[0];
+                String rol = datos[1];
+                int cantAspectos = Integer.parseInt(datos[2]);
+                //Personaje p = new Personaje(nombre,rol,cantAspectos);
+                sys.addPersonaje(nombreP, rol, cantAspectos);
+                //sys.getListaPersonajes().ingresarPersonaje(p);
+                for (int i = 3; i < datos.length; i+=2){
+                    String nombreA = datos[i];
+                    String calidadA = datos[i+1];
+                    sys.addSkin(nombreA, calidadA, nombreP);
+                    //p.getListaAspectos().ingresarAspecto(a);
+                }
+                
+    
             }
-            
-
+            arch.close();
+        } catch (IOException | NullPointerException e) {
+            System.out.println(e.getMessage());
         }
-        arch.close();
+        
     }
 
     public static void lecturaCuentas(SistCompraSkins sys) throws IOException {
-        Scanner arch = new Scanner(new File("Cuentas.txt"));
-        while (arch.hasNextLine()){
-            String line = arch.nextLine();
-            String[] datos = line.split(",");
-            String nombre = datos[0];
-            String contraseña = datos[1];
-            String id = datos[2];
-            int nivel = Integer.parseInt(datos[3]);
-            int rp = Integer.parseInt(datos[4]);
-            String region = datos[datos.length-1];
-            sys.crearCuenta(nombre,contraseña,id,nivel,rp,region);
-            Cliente c = new Cliente (nombre,contraseña,id,nivel,rp,region);
-            c.getPersonajesPoseidos().setCantPersonajesPoseidos(Integer.parseInt(datos[5]));
-            int i;
-            for (i = 6; i < datos.length; i+= (2+Integer.parseInt(datos[i+1]))){
-                Personaje p = sys.getListaPersonajes().getPersonaje(datos[i]);
-                PersonajePoseido pP = new PersonajePoseido(c, p);
-                c.getPersonajesPoseidos().ingresarPersonaje(pP);
-                int cantskins = Integer.parseInt(datos[i+1]);
-                for (int j = 1; j <= cantskins; j++){
-                    Aspecto a = p.getListaAspectos().getAspecto(datos[i+j+1]);
-                    AspectoPoseido aP = new AspectoPoseido(c,a);
-                    pP.getAspectosPoseidos().ingresarAspecto(aP);
+        try {
+            Scanner arch = new Scanner(new File("Cuentas.txt"));
+            while (arch.hasNextLine()){
+                String line = arch.nextLine();
+                String[] datos = line.split(",");
+                String nombre = datos[0];
+                String contraseña = datos[1];
+                String id = datos[2];
+                int nivel = Integer.parseInt(datos[3]);
+                int rp = Integer.parseInt(datos[4]);
+                String region = datos[datos.length-1];
+                int cantPjPoseidos = Integer.parseInt(datos[5]);
+                sys.crearCuenta(nombre,contraseña,id,nivel,rp,region, cantPjPoseidos);
+                int i;
+                for (i = 6; i < datos.length; i+= (2+Integer.parseInt(datos[i+1]))){
+                    String nombreP = datos[i];
+                    sys.addPersonajeCuenta(nombreP, nombre);
+                    //sys.personajeCuenta(p, c);
+                    //c.getPersonajesPoseidos().ingresarPersonaje(pP);
+                    int cantskins = Integer.parseInt(datos[i+1]);
+                    for (int j = 1; j <= cantskins; j++){
+                        String nombreA = datos[i+j+1];
+                        sys.addSkinCuenta(nombreP,nombreA,nombre);
+                        //Aspecto a = p.getListaAspectos().getAspecto(datos[i+j+1]);
+                       // AspectoPoseido aP = new AspectoPoseido(c,a);
+                        //sys.skinCuenta(aP, c, pP);
+                        //pP.getAspectosPoseidos().ingresarAspecto(aP);
+                    }
                 }
-            }
+        
     
-
-        }
+            }
+        } catch (IOException | NullPointerException e){
+                System.out.println(e.getMessage());
+         }
     }
 
     public static void lecturaRecaudacion(SistCompraSkins sys) throws IOException {
-        Scanner arch = new Scanner(new File("Estadisticas.txt"));
-        while (arch.hasNextLine()){
-            String line = arch.nextLine();
-            String[] datos = line.split(",");
-            String nombre = datos[0];
-            String recaudacion = datos[1];
-            if (sys.getListaPersonajes().getPersonaje(nombre) != null){
-                sys.getListaPersonajes().getPersonaje(nombre).setRecaudacion(Integer.parseInt(recaudacion));
+        try {
+            Scanner arch = new Scanner(new File("Estadisticas.txt"));
+            while (arch.hasNextLine()){
+                String line = arch.nextLine();
+                String[] datos = line.split(",");
+                String nombre = datos[0];
+                
+                //Personaje p = sys.buscarPersonaje(nombre);
+                int recaudacion = Integer.parseInt(datos[1]);
+                sys.addRecaudacion(nombre,recaudacion);
+    
+                
+    
             }
-
-            
-
+        } catch (IOException | NullPointerException e){
+            System.out.println(e.getMessage());
         }
     }
 
@@ -294,7 +310,7 @@ public class App {
 
     public static void escritura(SistCompraSkins sys){
         try {
-            BufferedWriter personajes = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Personajes.txt")));
+            BufferedWriter personajes = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Personajess.txt")));
             personajes.write(sys.obtenerDatosPersonajes());
             personajes.close();
         } catch (IOException e){ 
@@ -302,7 +318,7 @@ public class App {
         }
 
         try {
-            BufferedWriter clientes = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Cuentas.txt")));
+            BufferedWriter clientes = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Cuentass.txt")));
             clientes.write(sys.obtenerDatosClientes());
             clientes.close();
         } catch (IOException e){
@@ -310,7 +326,7 @@ public class App {
         }
 
         try {
-            BufferedWriter recaudacion = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Estadisticas.txt")));
+            BufferedWriter recaudacion = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Estadisticass.txt")));
             recaudacion.write(sys.obtenerDatosRecaudacion());
             recaudacion.close();
         } catch (IOException e){

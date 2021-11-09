@@ -8,9 +8,10 @@ public class Personaje{
     private int cantAspectos;
 
 
-    public Personaje(String nombre, String rol){
+    public Personaje(String nombre, String rol, int cantAspectos){
         this.nombre = nombre;
         this.rol = rol;
+        listaAspectos = new listaAspecto();
     }
 
     public String getNombre() {

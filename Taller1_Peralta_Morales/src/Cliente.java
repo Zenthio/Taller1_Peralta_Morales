@@ -9,7 +9,7 @@ public class Cliente {
     private boolean bloqueo;
     private String region;
 
-    public Cliente(String nombre, String contraseña, String id, int nivel, int RP, String region) {
+    public Cliente(String nombre, String contraseña, String id, int nivel, int RP, String region, int cantPj) {
         this.nombre = nombre;
         this.contraseña = contraseña;
         this.id = id;
@@ -17,6 +17,7 @@ public class Cliente {
         this.RP = RP;
         this.bloqueo = false;
         this.region = region;
+        personajesPoseidos = new listaPersonajesPoseidos();
     }
 
 

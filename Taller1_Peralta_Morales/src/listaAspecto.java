@@ -6,10 +6,13 @@ public class listaAspecto {
     private int cantAspectos;
     private Aspecto[] listaAspectos;
 
-    public listaAspecto(int max){
-        listaAspectos = new Aspecto[max];
-        cantAspectos = 0;
-        this.max = max;
+    public listaAspecto(){
+        listaAspectos = new Aspecto[this.max];
+        this.cantAspectos = 0;
+    }
+
+    public void setCantAspectos(int cantAspectos){
+        this.cantAspectos = cantAspectos;
     }
 
     public int getCantAspectos(){
@@ -37,20 +40,21 @@ public class listaAspecto {
         int i;
         for (i = 0; i < cantAspectos; i++){
             if (listaAspectos[i].getNombre().equals(nombre)){
-                break;
+                return listaAspectos[i];
             }
         }
-        if (i == cantAspectos){
-            return null;
-        }
-        else {
-            return listaAspectos[i];
-        }
+        return null;
     }
 
     public int getMax() {
         return this.max;
     }
 
-
+    @Override
+    public String toString() {
+        return "{" +
+            " max='" + getMax() + "'" +
+            ", cantAspectos='" + getCantAspectos() + "'" +
+            "}";
+    }
 }
