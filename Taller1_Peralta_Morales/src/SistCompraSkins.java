@@ -35,7 +35,7 @@ public interface SistCompraSkins{
 
     public boolean registrarSkin();
 
-    public void addPersonaje(String nombre, String rol, int cantAspectos);
+    public void addPersonaje(String nombre, String rol);
 
     public void addSkin(String nombre, String calidad, String nombreP);
 

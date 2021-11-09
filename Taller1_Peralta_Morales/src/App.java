@@ -32,8 +32,7 @@ public class App {
                 String[] datos = line.split(",");
                 String nombreP = datos[0];
                 String rol = datos[1];
-                int cantAspectos = Integer.parseInt(datos[2]);
-                sys.addPersonaje(nombreP, rol, cantAspectos);  
+                sys.addPersonaje(nombreP, rol);  
                 for (int i = 3; i < datos.length; i+=2){
                     String nombreA = datos[i];
                     String calidadA = datos[i+1];

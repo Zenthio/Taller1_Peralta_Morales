@@ -9,7 +9,7 @@ public class Personaje{
     private int contador;
 
 
-    public Personaje(String nombre, String rol, int cantAspectos){
+    public Personaje(String nombre, String rol){
         this.nombre = nombre;
         this.rol = rol;
         listaAspectos = new listaAspecto();

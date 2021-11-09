@@ -482,7 +482,7 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
             String rol = scanner.nextLine().toUpperCase();
             System.out.println("Ingresar cantidad de skins que posee");
             int cantSkins = Integer.parseInt(scanner.nextLine());
-            Personaje personaje = new Personaje(nombreP, rol, 0);
+            Personaje personaje = new Personaje(nombreP, rol);
             if (!listaPersonajes.ingresarPersonaje(personaje)){
                 throw new NullPointerException("Ya se alcanzó el límite de personajes en el sistema.");
             } else {
@@ -546,8 +546,8 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
      * @param cantAspectos
      */
     @Override
-    public void addPersonaje(String nombre, String rol, int cantAspectos){
-        Personaje personaje = new Personaje(nombre, rol, cantAspectos);
+    public void addPersonaje(String nombre, String rol){
+        Personaje personaje = new Personaje(nombre, rol);
         if (!listaPersonajes.ingresarPersonaje(personaje)){
             throw new NullPointerException("La lista de personajes está llena");
         }
