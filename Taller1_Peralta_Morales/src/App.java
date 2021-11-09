@@ -5,6 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 public class App {
+    
+    /** 
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
         SistCompraSkins sys = new SistCompraSkinsImpl(5000);
@@ -12,27 +17,13 @@ public class App {
         lecturaCuentas(sys);
         lecturaRecaudacion(sys);
         menu(sys,scanner);
-        /*
-        String line = "CHL Zenthio,contraseña,ElWatonTottus,315,230,5,Zed,3,Proyecto,Relampago,Campeonato,Aphelios,1,Amanecer,Azir,2,Reinos,Hielo,Vayne,2,Proyecto,China,Vex,1,Amanecer,LAS";
-        String[] datos = line.split(",");
-        String nombre = datos[0];
-        String contra = datos[1];
-        String id = datos[2];
-        int lv = Integer.parseInt(datos[3]);
-        int rp = Integer.parseInt(datos[4]);
-        String server = datos[datos.length-1];
-        int i;
-            for (i = 6; i < datos.length-1; i+= (2+Integer.parseInt(datos[i+1]))){
-                System.out.println("Nombre c: "+datos[i]);
-                int cantskins = Integer.parseInt(datos[i+1]);
-                for (int j = 1; j <= cantskins; j++){
-                   System.out.println("Nombre a: "+datos[i+j+1]);
-                }
-            }
-        */
+    }
 
-    } // Fin Main
-
+    
+    /** 
+     * @param sys
+     * @throws IOException
+     */
     public static void lecturaPersonajes(SistCompraSkins sys) throws IOException {
         try {
             Scanner arch = new Scanner(new File("Personajes.txt"));
@@ -42,14 +33,11 @@ public class App {
                 String nombreP = datos[0];
                 String rol = datos[1];
                 int cantAspectos = Integer.parseInt(datos[2]);
-                //Personaje p = new Personaje(nombre,rol,cantAspectos);
-                sys.addPersonaje(nombreP, rol, cantAspectos);
-                //sys.getListaPersonajes().ingresarPersonaje(p);
+                sys.addPersonaje(nombreP, rol, cantAspectos);  
                 for (int i = 3; i < datos.length; i+=2){
                     String nombreA = datos[i];
                     String calidadA = datos[i+1];
-                    sys.addSkin(nombreA, calidadA, nombreP);
-                    //p.getListaAspectos().ingresarAspecto(a);
+                    sys.addSkin(nombreA, calidadA, nombreP);                 
                 }
                 
     
@@ -61,34 +49,32 @@ public class App {
         
     }
 
+    
+    /** 
+     * @param sys
+     * @throws IOException
+     */
     public static void lecturaCuentas(SistCompraSkins sys) throws IOException {
         try {
             Scanner arch = new Scanner(new File("Cuentas.txt"));
             while (arch.hasNextLine()){
                 String line = arch.nextLine();
                 String[] datos = line.split(",");
-                String nombre = datos[0];
+                String nombreC = datos[0];
                 String contraseña = datos[1];
                 String id = datos[2];
                 int nivel = Integer.parseInt(datos[3]);
                 int rp = Integer.parseInt(datos[4]);
                 String region = datos[datos.length-1];
-                int cantPjPoseidos = Integer.parseInt(datos[5]);
-                sys.crearCuenta(nombre,contraseña,id,nivel,rp,region, cantPjPoseidos);
+                sys.crearCuenta(nombreC,contraseña,id,nivel,rp,region);
                 int i;
-                for (i = 6; i < datos.length; i+= (2+Integer.parseInt(datos[i+1]))){
+                for (i = 6; i < datos.length-1; i+= (2+Integer.parseInt(datos[i+1]))){
                     String nombreP = datos[i];
-                    sys.addPersonajeCuenta(nombreP, nombre);
-                    //sys.personajeCuenta(p, c);
-                    //c.getPersonajesPoseidos().ingresarPersonaje(pP);
+                    sys.addPersonajeCuenta(nombreP, nombreC);
                     int cantskins = Integer.parseInt(datos[i+1]);
                     for (int j = 1; j <= cantskins; j++){
                         String nombreA = datos[i+j+1];
-                        sys.addSkinCuenta(nombreP,nombreA,nombre);
-                        //Aspecto a = p.getListaAspectos().getAspecto(datos[i+j+1]);
-                       // AspectoPoseido aP = new AspectoPoseido(c,a);
-                        //sys.skinCuenta(aP, c, pP);
-                        //pP.getAspectosPoseidos().ingresarAspecto(aP);
+                        sys.addSkinCuenta(nombreP,nombreA,nombreC);
                     }
                 }
         
@@ -99,6 +85,11 @@ public class App {
          }
     }
 
+    
+    /** 
+     * @param sys
+     * @throws IOException
+     */
     public static void lecturaRecaudacion(SistCompraSkins sys) throws IOException {
         try {
             Scanner arch = new Scanner(new File("Estadisticas.txt"));
@@ -106,8 +97,6 @@ public class App {
                 String line = arch.nextLine();
                 String[] datos = line.split(",");
                 String nombre = datos[0];
-                
-                //Personaje p = sys.buscarPersonaje(nombre);
                 int recaudacion = Integer.parseInt(datos[1]);
                 sys.addRecaudacion(nombre,recaudacion);
     
@@ -119,6 +108,11 @@ public class App {
         }
     }
 
+    
+    /** 
+     * @param sys
+     * @param scanner
+     */
     public static void menu(SistCompraSkins sys, Scanner scanner){
         while (true){
             try {
@@ -140,16 +134,22 @@ public class App {
         escritura(sys);
     }
 
+    
+    /** 
+     * @param sys
+     * @param scanner
+     */
     private static void menuCliente(SistCompraSkins sys, Scanner scanner) {
 
-        System.out.println("<================================> MENU CLIENTE <================================>");
+        
         boolean salir = false;
         int opcion;
         do{
-            System.out.println("[1] Comprar Skin\n [2] Comprar Personaje\n[3] Skins Disponibles\n[4] Mostrar Inventario"
+            System.out.println("<================================> MENU CLIENTE <================================>\n");
+            System.out.println("[1] Comprar Skin\n[2] Comprar Personaje\n[3] Skins Disponibles\n[4] Mostrar Inventario"
             +"\n[5] Recargar RP\n[6] Mostrar datos de cuenta\n[7] Salir");
             try {
-                System.out.println("Ingrese su opción: ");
+                System.out.print("Ingrese su opción: ");
                 opcion = Integer.parseInt(scanner.nextLine());
                 switch (opcion) {
                     case 1:
@@ -202,6 +202,7 @@ public class App {
                     break;
     
                     case 7:
+                    System.out.println("<================================================================================>\n                                        |\n                                        ▼");
                     salir = true;
                     break;
     
@@ -216,18 +217,24 @@ public class App {
     }
     
 
+    
+    /** 
+     * @param sys
+     * @param scanner
+     */
     public static void menuAdmin(SistCompraSkins sys, Scanner scanner){
-        System.out.println("<================================> MENU CLIENTE <================================>");
+        
         boolean salir = false;
         int opcion;
 
         do {
+            System.out.println("<================================> MENU ADMIN <================================>\n");
             System.out.println("[1] Desplegar recaudación de ventas por rol\n[2] Desplegar recaudación de ventas por región\n"
-            +"[3] Desplegar recaudación de ventas por personaje\n[4] Desplegar cantidad de personajes por rol"
-            +"[5] Agregar un personaje\n[6] Agregar una skin\n[7] Bloquear a un jugador\n[8] Desplegar cuentas\n [9] Salir");
+            +"[3] Desplegar recaudación de ventas por personaje\n[4] Desplegar cantidad de personajes por rol\n"
+            +"[5] Agregar un personaje\n[6] Agregar una skin\n[7] Bloquear a un jugador\n[8] Desplegar cuentas\n[9] Salir");
 
             try {
-                System.out.println("Ingrese su opción: ");
+                System.out.print("Ingrese su opción: ");
                 opcion = Integer.parseInt(scanner.nextLine());
                 switch (opcion) {
                     case 1:
@@ -295,6 +302,7 @@ public class App {
                     break;
 
                     case 9:
+                    System.out.println("<================================================================================>\n                                        |\n                                        ▼");
                     salir = true;
                     break;
 
@@ -308,7 +316,12 @@ public class App {
         } while (salir != true);
     }
 
+    
+    /** 
+     * @param sys
+     */
     public static void escritura(SistCompraSkins sys){
+        System.out.println("<==============================> ESCRITURA DE ARCHIVOS <==============================>\n");
         try {
             BufferedWriter personajes = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Personajess.txt")));
             personajes.write(sys.obtenerDatosPersonajes());
@@ -332,6 +345,8 @@ public class App {
         } catch (IOException e){
             System.out.println(e.getMessage());
         }
+        System.out.println("Gracias por usar nuestro sistema, hasta luego! <3");
+        System.out.println("<================================================================================>");
     }
 
 

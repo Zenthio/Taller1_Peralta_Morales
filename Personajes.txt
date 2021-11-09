@@ -1,15 +1,6 @@
-Jinx,ADC,2,Jinx Elfa Buena,N,Jinx guardiana estelar,L
-Sett,TOP,1,Sett Puño del dragón,E
-Lillia,JG,1,Lillia flor espiritual,E
-Juanito,MID,5,Juanito playero,M,Juanito estudioso,N,Juanito BTS,L,Juanito abogado,N,Juanito carnaval,L
-Gato choro,TOP,4,Gato vienesa,L,Gato chorizo,L,Gato longaniza,M,Gato prieta,N
-Perro detonao,JG,2,Perro bomba,E,Perro granada,L
-Minotauro Poderoso,SUP,3,Minotauro Hawaii,L,Minotauro Diabolico,N,Minotauro Evangelico,N
-Spider Simplona,MID,2,Spider no tan simplona,N,Arania,M
-Demonio malo,JG,4,Demonio bueno,N,Demonio elevado a 2,D,Demonio playero,M,Demonio azul,N
-Kanguro boxeador,TOP,2,Kangu,N,Kanguro volador,N
-Pulpo Paul,MID,3,Salpicon de pulpo,N,Pulpo a feira,D,Pulpo tinta negra,L
-Alfred,ADC,1,Alfred terror cosmico,D
-Vex,TOP,1,Portadora del amanecer,N
-Jhin,JG,2,Oscuridad Cosmica,N,forajido,L
-Kaisa,MID,2,Kda All Out,L,Exterminador galactico,N
+Vex,ADC,2,Vex Forajida,N,Vex Portadora del amanecer,N
+Sett,TOP,1,Sett Forajido,E
+Lillia,JG,1,Lillia Forajida,L
+Ashe,JG,3,Ashe Forajida,L,Ashe Portadora del amanecer,N,Ashe Exploradora,N
+Nunu,MID,2,Nunu Forajido,E,Nunu Exploradora,L
+Zed,MID,2,Zed Forajido,L,Zed Estrella Oscura,E

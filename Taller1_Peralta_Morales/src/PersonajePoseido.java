@@ -9,10 +9,18 @@ public class PersonajePoseido {
         AspectosPoseidos = new listaAspectosPoseidos();
     }
 
+    
+    /** 
+     * @return Personaje
+     */
     public Personaje getPersonaje(){
         return this.personaje;
     }
 
+    
+    /** 
+     * @return listaAspectosPoseidos
+     */
     public listaAspectosPoseidos getAspectosPoseidos(){
         return this.AspectosPoseidos;
     }

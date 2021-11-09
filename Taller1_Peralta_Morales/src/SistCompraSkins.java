@@ -3,7 +3,7 @@ public interface SistCompraSkins{
     //RF2
     public boolean iniciarSesion();
 
-    public boolean crearCuenta(String nombre, String contraseña, String id, int nivel, int rp, String region, int cantPj);
+    public boolean crearCuenta(String nombre, String contraseña, String id, int nivel, int rp, String region);
 
     //RF3 CLIENTE
     public boolean comprarSkin();
@@ -11,6 +11,8 @@ public interface SistCompraSkins{
     public boolean comprarPersonaje();
 
     public String skinDisponibles();
+
+    public String personajesDisponibles();
 
     public String mostrarInventario();
 
@@ -57,6 +59,5 @@ public interface SistCompraSkins{
 
     public String obtenerDatosRecaudacion();
 
-    public Personaje buscarPersonaje(String nombreP);
 
 }

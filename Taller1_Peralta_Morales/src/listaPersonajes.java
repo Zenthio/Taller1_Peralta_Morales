@@ -9,6 +9,11 @@ public class listaPersonajes {
         cantPersonajes = 0; 
     }
 
+    
+    /** 
+     * @param personaje
+     * @return boolean
+     */
     public boolean ingresarPersonaje(Personaje personaje){
         if (cantPersonajes < max){
             listaPersonajes[cantPersonajes] = personaje;
@@ -18,17 +23,26 @@ public class listaPersonajes {
         return false;
     }
 
+    
+    /** 
+     * @param nombre
+     * @return Personaje
+     */
     public Personaje getPersonaje(String nombre){
         int i;
         for (i = 0; i < cantPersonajes; i++){
             if (listaPersonajes[i].getNombre().equals(nombre)){
-                System.out.println(listaPersonajes[i].getNombre());
                 return listaPersonajes[i];
             }
         }
         return null;
     }
 
+    
+    /** 
+     * @param i
+     * @return Personaje
+     */
     public Personaje getPersonajeI(int i) {
         if (i >= 0 && i < cantPersonajes){
             return listaPersonajes[i];
@@ -37,6 +51,10 @@ public class listaPersonajes {
         }
     }
     
+    
+    /** 
+     * @return int
+     */
     public int getCantPersonajes(){
         return this.cantPersonajes;
     }

@@ -11,23 +11,41 @@ public class listaAspecto {
         this.cantAspectos = 0;
     }
 
+    
+    /** 
+     * @param cantAspectos
+     */
     public void setCantAspectos(int cantAspectos){
         this.cantAspectos = cantAspectos;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getCantAspectos(){
         return cantAspectos;
     }
 
+    
+    /** 
+     * @param aspecto
+     * @return boolean
+     */
     public boolean ingresarAspecto(Aspecto aspecto){
         if (cantAspectos < max){
-            listaAspectos[cantAspectos] = aspecto;
-            cantAspectos++;
+            listaAspectos[this.cantAspectos] = aspecto;
+            this.cantAspectos++;
             return true;
         }
         return false;
     }
 
+    
+    /** 
+     * @param i
+     * @return Aspecto
+     */
     public Aspecto getAspectoI(int i) {
         if (i >= 0 && i < cantAspectos){
             return listaAspectos[i];
@@ -36,6 +54,11 @@ public class listaAspecto {
         }
     }
 
+    
+    /** 
+     * @param nombre
+     * @return Aspecto
+     */
     public Aspecto getAspecto(String nombre){
         int i;
         for (i = 0; i < cantAspectos; i++){
@@ -46,10 +69,18 @@ public class listaAspecto {
         return null;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getMax() {
         return this.max;
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String toString() {
         return "{" +

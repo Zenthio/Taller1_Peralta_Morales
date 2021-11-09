@@ -9,6 +9,11 @@ public class listaAspectosPoseidos {
         cantAspectosPoseidos = 0;
     }
 
+    
+    /** 
+     * @param aspectoP
+     * @return boolean
+     */
     public boolean ingresarAspecto (AspectoPoseido aspectoP){
 
         if (cantAspectosPoseidos < max){
@@ -19,10 +24,19 @@ public class listaAspectosPoseidos {
         return false;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getCantAspectosPoseidos(){
         return cantAspectosPoseidos;
     }
 
+    
+    /** 
+     * @param i
+     * @return AspectoPoseido
+     */
     public AspectoPoseido getAspectoI(int i) {
         if (i >= 0 && i < cantAspectosPoseidos){
             return listaAspectosPoseidos[i];
@@ -31,6 +45,11 @@ public class listaAspectosPoseidos {
         }
     }
 
+    
+    /** 
+     * @param nombre
+     * @return AspectoPoseido
+     */
     public AspectoPoseido getAspecto(String nombre){
         int i;
         for (i = 0; i < cantAspectosPoseidos; i++){

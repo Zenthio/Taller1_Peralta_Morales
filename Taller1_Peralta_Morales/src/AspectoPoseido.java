@@ -8,6 +8,10 @@ public class AspectoPoseido {
         this.aspecto = aspecto;
     }
 
+    
+    /** 
+     * @return Aspecto
+     */
     public Aspecto getAspecto(){
         return this.aspecto;
     }

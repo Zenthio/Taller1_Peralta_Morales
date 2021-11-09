@@ -1,14 +1,6 @@
-Sett,500000
-Jhin,600000
-Jinx,400000
-Juanito,120000
-Gato choro,900000
-Perro detonao,500000
-Minotauro Poderoso,500000
-Spider Simplona,600000
-Demonio malo,200000
-Kanguro boxeador,400000
-Pulpo Paul,500000
-Alfred,10000
-Vex,200000
-Kaisa,700000
+Vex,9123032
+Sett,123213
+Lillia,13212
+Ashe,138012
+Nunu,100000
+Zed,2795

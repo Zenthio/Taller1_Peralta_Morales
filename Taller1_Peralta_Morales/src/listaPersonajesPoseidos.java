@@ -7,43 +7,61 @@ public class listaPersonajesPoseidos {
     private int cantPersonajesPoseidos;
 
     public listaPersonajesPoseidos(){
-        listaPersonajesPoseidos = new PersonajePoseido[max];
-        cantPersonajesPoseidos = 0;
+        listaPersonajesPoseidos = new PersonajePoseido[this.max];
+        this.cantPersonajesPoseidos = 0;
     }
 
+    
+    /** 
+     * @param personaje
+     * @return boolean
+     */
     public boolean ingresarPersonaje(PersonajePoseido personaje) {
-        if (cantPersonajesPoseidos < max){
+        if (cantPersonajesPoseidos < this.max){
             listaPersonajesPoseidos[cantPersonajesPoseidos] = personaje;
-            cantPersonajesPoseidos++;
+            this.cantPersonajesPoseidos++;
             return true;
         }
         return false;
     }
 
+    
+    /** 
+     * @param nombre
+     * @return PersonajePoseido
+     */
     public PersonajePoseido getPersonaje(String nombre) {
         int i;
-        for (i = 0; i < cantPersonajesPoseidos; i++){
+        for (i = 0; i < this.cantPersonajesPoseidos; i++){
             if (listaPersonajesPoseidos[i].getPersonaje().getNombre().equals(nombre)){
-                break;
+                return listaPersonajesPoseidos[i];
             }
         }
-        if (i == cantPersonajesPoseidos){
-            return null;
-        }
-        else {
-            return listaPersonajesPoseidos[i];
-        }
+        return null;
     }
+    
+    /** 
+     * @param cant
+     */
     public void setCantPersonajesPoseidos(int cant){
         this.cantPersonajesPoseidos = cant;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getCantPersonajesPoseidos(){
         return this.cantPersonajesPoseidos;
     }
 
+    
+    /** 
+     * @param i
+     * @return PersonajePoseido
+     */
     public PersonajePoseido getPersonajeI(int i){
-        if (i >= 0 && i < cantPersonajesPoseidos){
+        if (i >= 0 && i < this.cantPersonajesPoseidos){
             return listaPersonajesPoseidos[i];
         } else {
             return null;

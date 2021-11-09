@@ -13,61 +13,77 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
     private static double recaudacionKR = 0;
     private static double recaudacionNA = 0;
     private static double recaudacionRU = 0;
-    private Cliente admin = new Cliente("admin","admin","admin",0,9999999,"NA",0);
-
-    //Al tener precondicion, hay que controlar en el main el throw exception 
     public SistCompraSkinsImpl(int cantClientes){
         listaClientes = new listaClientes(cantClientes);
         listaPersonajes = new listaPersonajes();
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getPrivilegio(){
         return this.privilegio;
     }
 
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean iniciarSesion() {
         System.out.println("<==============================> INICIO DE SESIÓN <==============================>\n[1] Iniciar Sesión\n[2] Registrarse\n[3] Salir");
+        System.out.print("Ingrese opción: ");
         int opcion = Integer.parseInt(scanner.nextLine());
         if (opcion == 1){
 
-            System.out.println("Ingresar nombre: ");
+            System.out.print("Ingresar nombre: ");
             String nombre = scanner.nextLine();
-            if (listaClientes.getCliente(nombre).getBloqueo()){
-                throw new NullPointerException("Este usuario se encuentra bloqueado.");
-            }
-            System.out.println("Ingresar contraseña: ");
-            String contraseña = scanner.nextLine();
-            if (listaClientes.getCliente(nombre) == null || !listaClientes.getCliente(nombre).getContraseña().equals(contraseña)){
-                System.out.println("Uno de los datos es erroneo o no existe, desea registrarse?\n[1] Sí\n[2] No");
-                int opcionA = Integer.parseInt(scanner.nextLine());
-                if (opcionA == 1){
-                    registrarCuenta();
-                }
-                //throw new NullPointerException("Uno de los datos ingresados es erróneo o no existe.");
+            if (nombre.equals("admin")){
+                this.privilegio = 2;
+                System.out.println("<================================================================================>\n                                        |\n                                        ▼");
             } else {
-                if (nombre.equals("admin") && contraseña.equals("admin")){
-                    this.c.copiar(admin);
-                    this.privilegio = 2;
-                    return true;
+                if (listaClientes.getCliente(nombre) != null && !listaClientes.getCliente(nombre).getBloqueo()){
+                    System.out.print("Ingresar contraseña: ");
+                    String contraseña = scanner.nextLine();
+                    if (listaClientes.getCliente(nombre) == null || !listaClientes.getCliente(nombre).getContraseña().equals(contraseña)){
+                        System.out.println("Uno de los datos es erroneo o no existe, desea registrarse?\n[1] Sí\n[2] No");
+                        int opcionA = Integer.parseInt(scanner.nextLine());
+                        if (opcionA == 1){
+                            System.out.println("<================================================================================>\n                                        |\n                                        ▼");
+                            registrarCuenta();
+                        }
+                        //throw new NullPointerException("Uno de los datos ingresados es erróneo o no existe.");
+                    } else {
+                        this.c = listaClientes.getCliente(nombre);
+                        this.privilegio = 1;
+                        return true;
+                    }
                 } else {
-                    this.c = listaClientes.getCliente(nombre);
-                    this.privilegio = 1;
-                    return true;
+                    this.privilegio = 4;
+                    throw new NullPointerException("Este usuario se encuentra bloqueado.");
                 }
             }
         }
         if (opcion == 2){
+            System.out.println("<================================================================================>                                        |\n                                        ▼\n");
             registrarCuenta();
         }
         if (opcion == 3){
             this.privilegio = 0;
+            System.out.println("<================================================================================>\n                                        |\n                                        ▼");
             return true;
         }
         return false;
+    
     }
 
+    
+    /** 
+     * @return boolean
+     */
     public boolean registrarCuenta(){
+        System.out.println("<==============================> REGISTRO CUENTA <==============================>\n");
         System.out.println("Ingresar nombre de cuenta a registrar: ");
         String nombre = scanner.nextLine();
         System.out.println("Ingresar ID(Nick) a registrar: ");
@@ -82,33 +98,48 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
         String contraseña = scanner.nextLine();
         System.out.println("Ingresar región en la que se encuentra su cuenta: ");
         String region = scanner.nextLine();
-        Cliente clienteNuevo = new Cliente(nombre, contraseña, id, 0, 0, region, 0);
+        Cliente clienteNuevo = new Cliente(nombre, contraseña, id, 0, 0, region);
         if (!listaClientes.ingresarCliente(clienteNuevo)){
             throw new NullPointerException("Se alcanzó el límite de usuarios registrados");
         } else {
+            System.out.println("<================================================================================>\n                                        |\n                                        ▼");
             return true;
         }
         
     }
+    
+    /** 
+     * @param nombre
+     * @param contraseña
+     * @param id
+     * @param nivel
+     * @param rp
+     * @param region
+     * @return boolean
+     */
     @Override
-    public boolean crearCuenta(String nombre, String contraseña, String id, int nivel, int rp, String region, int cantPj) {
-        // TODO Auto-generated method stub
+    public boolean crearCuenta(String nombre, String contraseña, String id, int nivel, int rp, String region) {
         if (listaClientes.getCliente(nombre) == null){
-                Cliente c = new Cliente(nombre, contraseña, id, nivel, rp, region, cantPj);
-                 if (!listaClientes.ingresarCliente(c)){
-                     throw new NullPointerException("Se alcanzó el límite de usuarios registrados.");
-                 } else {
-                     return true;
-                 }
-
-        } else {
-            throw new NullPointerException("No se encontró la cuenta con los datos ingresados.");
-            //return false; el return sobra cuando se usa un throw
-        }
+                Cliente c = new Cliente(nombre, contraseña, id, nivel, rp, region);
+                if (!listaClientes.ingresarCliente(c)){
+                    throw new NullPointerException("Se alcanzó el límite de usuarios registrados.");
+                } else {
+                    return true;
+                }
+                
+            } else {
+                throw new NullPointerException("No se encontró la cuenta con los datos ingresados.");
+            }
         
     }
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean comprarSkin(){
+        System.out.println("<==============================> COMPRA SKIN <==============================>\n");
+        skinDisponibles();
         System.out.println("Ingrese nombre de personaje: \n");
         String nombreP = scanner.nextLine();
         if (listaPersonajes.getPersonaje(nombreP) == (null)){
@@ -153,6 +184,7 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
                                 recaudacionRU += aspectoPoseido.getAspecto().getPrecio()*6.15;
                             }
                             c.setNivel(c.getNivel()+1);
+                            System.out.println("<================================================================================>\n                                        |\n                                        ▼");
                             return true;
                         }
                     }
@@ -160,8 +192,14 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
             }
         }
     }
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean comprarPersonaje() {
+        System.out.println("<==============================> COMPRA PERSONAJE <==============================>\nEstos son los personajes que no poseé");
+        personajesDisponibles();
         System.out.println("Ingrese nombre de personaje: \n");
         String nombreP = scanner.nextLine();
         if (listaPersonajes.getPersonaje(nombreP) == (null)){
@@ -179,34 +217,82 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
                     c.takeRP(personaje.getPrecio()); //
                     personaje.addRecaudacion(personaje.getPrecio());
                     c.setNivel(c.getNivel()+1);
+                    System.out.println("<================================================================================>\n                                        |\n                                        ▼");
                     return true;
                 }
 
             }
         }
     }
+    
+    /** 
+     * @return String
+     */
     @Override
     public String skinDisponibles() {
+        System.out.println("<==============================> SKINS DISPONIBLES <==============================>\n");
         String retorno = "";
         for (int i = 0; i < c.getPersonajesPoseidos().getCantPersonajesPoseidos(); i++){
             PersonajePoseido p = c.getPersonajesPoseidos().getPersonajeI(i);
             retorno += "Personaje: "+p.getPersonaje().getNombre()+"\n";
-            for (int j = 0; j < p.getPersonaje().getCantAspectos(); j++){
+            //System.out.println(p.getPersonaje().getListaAspectos().getCantAspectos());
+            //System.out.println(p.getAspectosPoseidos().getCantAspectosPoseidos());
+            for (int j = 0; j < p.getPersonaje().getListaAspectos().getCantAspectos(); j++){
+                //System.out.println("Entré aquí al J");
+                Aspecto a = p.getPersonaje().getListaAspectos().getAspectoI(j);
+                //System.out.println(a.getNombre()+" se compara con: ");
                 for (int k = 0; k < p.getAspectosPoseidos().getCantAspectosPoseidos(); k++){
-                    if (!p.getPersonaje().getListaAspectos().getAspectoI(j).getNombre().equals(p.getAspectosPoseidos().getAspectoI(k).getAspecto().getNombre())){
-                        retorno += "Skin: "+p.getPersonaje().getListaAspectos().getAspectoI(j).getNombre()+"\n";
+                    //System.out.println("Entré aquí al K");
+                    AspectoPoseido aP = p.getAspectosPoseidos().getAspectoI(k);
+                    //System.out.print(aP.getAspecto().getNombre());
+                    if (a.getNombre().equals(aP.getAspecto().getNombre())){
+                        a.setContador(a.getContador()+1);
+                        //retorno += "Skin: "+p.getPersonaje().getListaAspectos().getAspectoI(j).getNombre()+"\n";
                     }
+                }
+                if (a.getContador() == 0) {
+                    retorno += "Skin: "+a.getNombre()+"\n";
+                } else {
+                    retorno+= "Ya posee todas las skins\n";
                 }
             }
             retorno += "\n";
         }
             
-        
+        retorno +=  "<================================================================================>\n                                        |\n                                        ▼";
         return retorno;
     }
 
+    
+    /** 
+     * @return String
+     */
+    public String personajesDisponibles(){
+        String retorno = "";
+        for (int i = 0; i < listaPersonajes.getCantPersonajes(); i++){
+            Personaje p = listaPersonajes.getPersonajeI(i);
+            for (int j = 0; j < c.getPersonajesPoseidos().getCantPersonajesPoseidos(); j++) {
+                PersonajePoseido pP = c.getPersonajesPoseidos().getPersonajeI(j);
+                if (p.getNombre().equals(pP.getPersonaje().getNombre())){
+                    p.setContador(p.getContador()+1);
+                }
+            }
+            if (p.getContador() == 0){
+                retorno += "Personaje: "+p.getNombre()+"\n";
+            } else {
+                retorno += "Ya poseé todos los personajes\n";
+            }
+        }
+        return retorno;
+    }
+
+    
+    /** 
+     * @return String
+     */
     @Override
     public String mostrarInventario() {
+        System.out.println("<==============================> MOSTRAR INVENTARIO <==============================>\n");
         String retorno = "";
          listaPersonajesPoseidos listaPj = c.getPersonajesPoseidos();
          for (int i = 0; i < listaPj.getCantPersonajesPoseidos(); i++){
@@ -216,16 +302,25 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
                 retorno += "Aspecto: "+listaAs.getAspectoI(j).getAspecto().getNombre()+"\n";
             }
          }
+         retorno +=  "<================================================================================>\n                                        |\n                                        ▼";
         return retorno;
     }
     @Override
     public void recargarRp() {
+        System.out.println("<==============================> RECARGAR RP <==============================>\n");
         System.out.println("Ingrese RP a cargar: \n");
         int rp = Integer.parseInt(scanner.nextLine());
         c.setRP(rp);
+        System.out.println("<================================================================================>\n                                        |\n                                        ▼");
     }
+
+    
+    /** 
+     * @return String
+     */
     @Override
     public String datosCuenta() {
+        System.out.println("<==============================> DATOS CUENTA <==============================>\n");
         String retorno = "";
         String contraEncriptada = "";
         for (int i = 0; i < c.getContraseña().length()-3; i++){
@@ -233,11 +328,12 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
         }
         contraEncriptada+= c.getContraseña().substring(c.getContraseña().length()-3, c.getContraseña().length());
         retorno += "Nombre de cuenta: "+c.getNombre()+"\nNick: "+c.getId()+"\nContraseña: "+contraEncriptada;
-
+        retorno +=  "\n<================================================================================>\n                                        |\n                                        ▼";
         return retorno;
     }
     @Override
     public void cambiarClave() {
+        System.out.println("<==============================> CAMBIO DE CLAVE <==============================>\n");
         System.out.println("Ingrese su antigua contraseña: \n");
         String contraseñaPrueba = scanner.nextLine();
         if (c.getContraseña().equals(contraseñaPrueba)){
@@ -253,12 +349,18 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
                 } else {
                     c.setContraseña(nuevaContraseña);
                     System.out.println("Contraseña cambiada exitosamente.");
+                    System.out.println("<================================================================================>\n                                        |\n                                        ▼");
                 }
             }
         }
     }
+    
+    /** 
+     * @return String
+     */
     @Override
     public String obtenerVentasRol() {
+        System.out.println("<==============================> VENTAS ROL <==============================>\n");
         String retorno = "";
         double recaudacionADC = 0;
         double recaudacionSUP = 0;
@@ -296,27 +398,45 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
         retorno += "Recaudación de Personajes ADC: "+recaudacionADC+" CLP\nRecaudación de Personajes SUP: "+
         recaudacionSUP+" CLP\nRecaudación de TOP: "+recaudacionTOP+" CLP\nRecaudación de Personajes MID: "+
         recaudacionMID+ "CLP\nRecaudación de JG: "+recaudacionJG+" CLP\n";
+        retorno +=  "<================================================================================>\n                                        |\n                                        ▼";
         return retorno;
     }
+    
+    /** 
+     * @return String
+     */
     @Override
     public String obtenerVentasRegion() {
+        System.out.println("<==============================> VENTAS REGION <==============================>\n");
         String retorno = "";
         retorno+= "Ventas LAS: "+recaudacionLAS+" CLP\nVentas LAN: "+recaudacionLAN+" CLP\nVentas EUW: "+
         recaudacionEUW+" CLP\n Ventas KR: "+recaudacionKR+" CLP\nVentas NA: "+recaudacionNA+" CLP\nVentas RU: "+
         recaudacionRU+" CLP";
+        retorno +=  "<================================================================================>\n                                        |\n                                        ▼";
         return retorno;
     }
+    
+    /** 
+     * @return String
+     */
     @Override
     public String obtenerVentasPersonaje() {
+        System.out.println("<==============================> VENTAS PERSONAJE <==============================>\n");
         String retorno = "";
         for (int i = 0; i < listaPersonajes.getCantPersonajes(); i++){
             double recaudacion = listaPersonajes.getPersonajeI(i).getRecaudacion()*6.15;
             retorno+= "Personaje: "+listaPersonajes.getPersonajeI(i).getNombre()+" | Recaudación: "+recaudacion+" CLP\n";
         }
+        retorno +=  "<================================================================================>\n                                        |\n                                        ▼";
         return retorno;
     }
+    
+    /** 
+     * @return String
+     */
     @Override
     public String obtenerPersonajeRol() {
+        System.out.println("<==============================> PERSONAJES POR ROL <==============================>\n");
         String retorno = "";
         int cantidadADC = 0;
         int cantidadSUP = 0;
@@ -343,10 +463,16 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
         retorno += "Cantidad de campeones ADC: "+cantidadADC+"\nCantidad de campeones SUP: "+
         cantidadSUP+"\nCantidad de campeones TOP: "+cantidadTOP+"\nCantidad de campeones MID: "+
         cantidadMID+"\nCantidad de campeones JG: "+cantidadJG;
+        retorno +=  "<================================================================================>\n                                        |\n                                        ▼";
         return retorno;
     }
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean registrarPersonaje() {
+        System.out.println("<==============================> REGISTRAR PERSONAJE <==============================>\n");
         System.out.println("Ingrese nombre de personaje que desea agregar: \n");
         String nombreP = scanner.nextLine();
         if (listaPersonajes.getPersonaje(nombreP) != (null)){
@@ -372,13 +498,19 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
                     }
                     
                 }
+                System.out.println("<================================================================================>\n                                        |\n                                        ▼");
                 return true;
             }
         }
     }
 
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean registrarSkin() {
+        System.out.println("<==============================> REGISTRAR SKIN <==============================>\n");
         System.out.println("Ingrese nombre de personaje al cual le desea agregar skins: ");
         String nombreP = scanner.nextLine();
         if (listaPersonajes.getPersonaje(nombreP) == (null)){
@@ -401,29 +533,38 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
                         throw new NullPointerException("Ya se superó el número máximo de skins");
                     }
                 }
+                System.out.println("<================================================================================>\n                                        |\n                                        ▼");
                 return true;
             }
         }
     }
 
+    
+    /** 
+     * @param nombre
+     * @param rol
+     * @param cantAspectos
+     */
     @Override
     public void addPersonaje(String nombre, String rol, int cantAspectos){
         Personaje personaje = new Personaje(nombre, rol, cantAspectos);
         if (!listaPersonajes.ingresarPersonaje(personaje)){
             throw new NullPointerException("La lista de personajes está llena");
         }
-        System.out.println("pj: "+listaPersonajes.getPersonaje(nombre).getNombre());
-        System.out.println("rol: "+listaPersonajes.getPersonaje(nombre).getRol());
-        System.out.println("cantpj: "+listaPersonajes.getCantPersonajes());
     }
 
+    
+    /** 
+     * @param nombreA
+     * @param calidadA
+     * @param nombreP
+     */
     @Override
     public void addSkin(String nombreA, String calidadA, String nombreP){
-        if (listaPersonajes.getPersonaje(nombreP) != null){ //Si existe el personaje
+        if (listaPersonajes.getPersonaje(nombreP) != null){
             Personaje p = listaPersonajes.getPersonaje(nombreP);
             Aspecto skin = new Aspecto(nombreA, calidadA,p);
             if (p.getListaAspectos().getAspecto(nombreA) == null){
-                //Si la skin NO! EXISTE EN EL PERSONAJE
                 if (!p.getListaAspectos().ingresarAspecto(skin)){
                     throw new NullPointerException("La lista de aspectos está llena");
                 }            
@@ -433,21 +574,22 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
         } else {
             throw new NullPointerException("No se encontró el personaje o no existe.");
         }
-        System.out.println("pj: "+listaPersonajes.getPersonaje(nombreP).getNombre());
-        System.out.println("as: "+listaPersonajes.getPersonaje(nombreP).getListaAspectos().getAspecto(nombreA).getNombre());
-        System.out.println("cal "+listaPersonajes.getPersonaje(nombreP).getListaAspectos().getAspecto(nombreA).getCalidad());
-        System.out.println("cantAsPj: "+listaPersonajes.getPersonaje(nombreP).getListaAspectos().getCantAspectos());
     }
 
+    
+    /** 
+     * @param nombreP
+     * @param nombreC
+     */
     @Override
     public void addPersonajeCuenta(String nombreP, String nombreC){
-        if (listaClientes.getCliente(nombreC) != null){ //Si existe el Cliente
-            Cliente c = listaClientes.getCliente(nombreC);
-            if (listaPersonajes.getPersonaje(nombreP) != null){//Si existe el personaje
+        if (listaClientes.getCliente(nombreC) != null){
+            Cliente cliente = listaClientes.getCliente(nombreC);
+            if (listaPersonajes.getPersonaje(nombreP) != null){
                 Personaje p = listaPersonajes.getPersonaje(nombreP);
-                PersonajePoseido pP = new PersonajePoseido(c,p);
-                if (c.getPersonajesPoseidos().getPersonaje(nombreP) == null){ //Si el cliente no poseé el personaje
-                    if (!c.getPersonajesPoseidos().ingresarPersonaje(pP)){
+                PersonajePoseido pP = new PersonajePoseido(cliente,p);
+                if (cliente.getPersonajesPoseidos().getPersonaje(nombreP) == null){
+                    if (!cliente.getPersonajesPoseidos().ingresarPersonaje(pP)){
                         throw new NullPointerException("Se alcanzó el límite de personajes poseídos");
                     }
                 } else {
@@ -459,21 +601,24 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
         } else {
             throw new NullPointerException("No existe el cliente");
         }
-        System.out.println("pjposeido: "+c.getPersonajesPoseidos().getPersonaje(nombreP));
-        System.out.println("cantpjposeido: "+c.getPersonajesPoseidos().getCantPersonajesPoseidos());
-        System.out.println("ncl: "+c.getNombre());
     }
 
+    
+    /** 
+     * @param nombreP
+     * @param nombreA
+     * @param nombreC
+     */
     @Override
     public void addSkinCuenta(String nombreP, String nombreA, String nombreC){
         if (listaClientes.getCliente(nombreC) != null){
-            Cliente c = listaClientes.getCliente(nombreC);
-            if (c.getPersonajesPoseidos().getPersonaje(nombreP) != null){
+            Cliente cliente = listaClientes.getCliente(nombreC);
+            if (cliente.getPersonajesPoseidos().getPersonaje(nombreP) != null){
                 if (listaPersonajes.getPersonaje(nombreP).getListaAspectos().getAspecto(nombreA) != null){
                     Aspecto a = listaPersonajes.getPersonaje(nombreP).getListaAspectos().getAspecto(nombreA);
-                    AspectoPoseido aP = new AspectoPoseido(c,a);
-                    if (c.getPersonajesPoseidos().getPersonaje(nombreP).getAspectosPoseidos().getAspecto(nombreA) == null){ //Si el personajeposeido no poseé la skin
-                        if (!c.getPersonajesPoseidos().getPersonaje(nombreP).getAspectosPoseidos().ingresarAspecto(aP)){
+                    AspectoPoseido aP = new AspectoPoseido(cliente,a);
+                    if (cliente.getPersonajesPoseidos().getPersonaje(nombreP).getAspectosPoseidos().getAspecto(nombreA) == null){ //Si el personajeposeido no poseé la skin
+                        if (!cliente.getPersonajesPoseidos().getPersonaje(nombreP).getAspectosPoseidos().ingresarAspecto(aP)){
                             throw new NullPointerException("Se alcanzó el límite de skins poseidas");
                         }
                     } else {
@@ -489,25 +634,24 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
         } else {
             throw new NullPointerException("El cliente no existe"); 
         }
-        System.out.println("ncl: "+c.getNombre());
-        System.out.println("pjposeido: "+c.getPersonajesPoseidos().getPersonaje(nombreP));
-        System.out.println("cantpjposeido: "+c.getPersonajesPoseidos().getCantPersonajesPoseidos());
-        System.out.println("asposeido: "+c.getPersonajesPoseidos().getPersonaje(nombreP).getAspectosPoseidos().getAspecto(nombreA));
-        System.out.println("cantasposeidos: "+c.getPersonajesPoseidos().getPersonaje(nombreP).getAspectosPoseidos().getCantAspectosPoseidos());
     }
     
 
+    
+    /** 
+     * @param nombreP
+     * @param recaudacion
+     */
     @Override
     public void addRecaudacion(String nombreP, int recaudacion) {
         if (listaPersonajes.getPersonaje(nombreP) != null){
             Personaje p = listaPersonajes.getPersonaje(nombreP);
             p.setRecaudacion(recaudacion);
         }
-        System.out.println("pj: "+listaPersonajes.getPersonaje(nombreP));
-        System.out.println("rec: "+listaPersonajes.getPersonaje(nombreP).getRecaudacion());
     }
     @Override
     public void bloquearJugador() {
+        System.out.println("<==============================> BLOQUEO JUGADOR <==============================>\n");
         System.out.println("Ingresar nombre de cliente a bloquear: ");
         String nombre = scanner.nextLine();
         if (listaClientes.getCliente(nombre) == (null)){
@@ -515,6 +659,7 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
         } else {
             Cliente c = listaClientes.getCliente(nombre);
             c.setBloqueo(true);
+            System.out.println("<================================================================================>\n                                        |\n                                        ▼");
         }
         
     }
@@ -525,24 +670,35 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
                 Cliente clientei = listaClientes.getClienteI(i);
                 Cliente clientej = listaClientes.getClienteI(j);
                 if (listaClientes.getClienteI(i).getNivel() < listaClientes.getClienteI(j).getNivel()){
-                    Cliente aux = listaClientes.getClienteI(i);
+                    Cliente temp = new Cliente();
+                    temp.copiar(clientei);
                     clientei.copiar(clientej);
-                    clientej.copiar(aux);
+                    clientej.copiar(temp);
                 }
             }
         }
         
     }
+    
+    /** 
+     * @return String
+     */
     @Override
     public String obtenerCuentas() {
+        System.out.println("<==============================> DESPLIEGUE CUENTAS <==============================>\n");
         String retorno = "";
         for (int i = 0; i < listaClientes.getCantClientes(); i++){
             Cliente cliente = listaClientes.getClienteI(i);
             retorno += "Nombre: "+cliente.getNombre()+" | Nivel: "+cliente.getNivel()+"\n";
         }
+        retorno +=  "<================================================================================>\n                                        |\n                                        ▼";
         return retorno;
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String obtenerDatosPersonajes() {
         String retorno = "";
@@ -564,6 +720,10 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
         return retorno;
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String obtenerDatosClientes() {
         String retorno = "";
@@ -571,28 +731,34 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
             Cliente cliente = listaClientes.getClienteI(i);
             if (i < listaClientes.getCantClientes()-1){
                 retorno += cliente.getNombre()+","+cliente.getContraseña()+","+cliente.getId()+","+
-                cliente.getNivel()+","+cliente.getPersonajesPoseidos().getCantPersonajesPoseidos();
+                cliente.getNivel()+","+cliente.getRP()+","+cliente.getPersonajesPoseidos().getCantPersonajesPoseidos();
                 for (int j = 0; j < cliente.getPersonajesPoseidos().getCantPersonajesPoseidos(); j++) {
-                    retorno += ","+cliente.getPersonajesPoseidos().getPersonajeI(i).getPersonaje().getNombre();
-                    for (int k = 0; k < cliente.getPersonajesPoseidos().getPersonajeI(i).getAspectosPoseidos().getCantAspectosPoseidos(); k++){
-                        retorno += ","+cliente.getPersonajesPoseidos().getPersonajeI(i).getAspectosPoseidos().getAspectoI(k).getAspecto().getNombre();
+                    retorno += ","+cliente.getPersonajesPoseidos().getPersonajeI(j).getPersonaje().getNombre()+","+cliente.getPersonajesPoseidos().getPersonajeI(j).getAspectosPoseidos().getCantAspectosPoseidos();
+                    for (int k = 0; k < cliente.getPersonajesPoseidos().getPersonajeI(j).getAspectosPoseidos().getCantAspectosPoseidos(); k++){
+                        retorno += ","+cliente.getPersonajesPoseidos().getPersonajeI(j).getAspectosPoseidos().getAspectoI(k).getAspecto().getNombre();
                     }
                 }
+                retorno +=","+cliente.getRegion();
                 retorno += "\n";
             } else {
                 retorno += cliente.getNombre()+","+cliente.getContraseña()+","+cliente.getId()+","+
                 cliente.getNivel()+","+cliente.getPersonajesPoseidos().getCantPersonajesPoseidos();
                 for (int j = 0; j < cliente.getPersonajesPoseidos().getCantPersonajesPoseidos(); j++) {
-                    retorno += ","+cliente.getPersonajesPoseidos().getPersonajeI(i).getPersonaje().getNombre();
-                    for (int k = 0; k < cliente.getPersonajesPoseidos().getPersonajeI(i).getAspectosPoseidos().getCantAspectosPoseidos(); k++){
-                        retorno += ","+cliente.getPersonajesPoseidos().getPersonajeI(i).getAspectosPoseidos().getAspectoI(k).getAspecto().getNombre();
+                    retorno += ","+cliente.getPersonajesPoseidos().getPersonajeI(j).getPersonaje().getNombre()+","+cliente.getPersonajesPoseidos().getPersonajeI(j).getAspectosPoseidos().getCantAspectosPoseidos();
+                    for (int k = 0; k < cliente.getPersonajesPoseidos().getPersonajeI(j).getAspectosPoseidos().getCantAspectosPoseidos(); k++){
+                        retorno += ","+cliente.getPersonajesPoseidos().getPersonajeI(j).getAspectosPoseidos().getAspectoI(k).getAspecto().getNombre();
                     }
                 }
+                retorno +=","+cliente.getRegion();
             }
         }
         return retorno;
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String obtenerDatosRecaudacion() {
         String retorno = "";
@@ -607,20 +773,5 @@ public class SistCompraSkinsImpl implements SistCompraSkins {
         return retorno;
     }
 
-    @Override
-    public Personaje buscarPersonaje(String nombreP) {
-        int i;
-        for (i = 0; i < listaPersonajes.getCantPersonajes(); i++){
-            if (listaPersonajes.getPersonajeI(i).getNombre().equals(nombreP)){
-                break;
-            }
-        }
-        if (i == listaPersonajes.getCantPersonajes()){
-            return null;
-        }
-        else {
-            return listaPersonajes.getPersonajeI(i);
-        }
-    }
 
 }
